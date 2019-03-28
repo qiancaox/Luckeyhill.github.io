@@ -100,16 +100,16 @@
 
 
 
-  <meta name="description" content="像山一样稳重，像海一样壮阔">
+  <meta name="description" content="积少成多，水滴石穿">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Luckeyhill">
+<meta property="og:title" content="yeeshe">
 <meta property="og:url" content="https://qiancaox.github.io/index.html">
-<meta property="og:site_name" content="Luckeyhill">
-<meta property="og:description" content="像山一样稳重，像海一样壮阔">
+<meta property="og:site_name" content="yeeshe">
+<meta property="og:description" content="积少成多，水滴石穿">
 <meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Luckeyhill">
-<meta name="twitter:description" content="像山一样稳重，像海一样壮阔">
+<meta name="twitter:title" content="yeeshe">
+<meta name="twitter:description" content="积少成多，水滴石穿">
 
 
 
@@ -126,7 +126,7 @@
   };
 </script>
 
-  <title>Luckeyhill</title>
+  <title>yeeshe</title>
   
 
 
@@ -186,7 +186,7 @@
     <div class="custom-logo-site-title">
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Luckeyhill</span>
+        <span class="site-title">yeeshe</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -213,7 +213,7 @@
         
         
           
-          <li class="menu-item menu-item-首页 menu-item-active">
+          <li class="menu-item menu-item-ios-开发笔记 menu-item-active">
 
     
     
@@ -223,41 +223,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-知识小集">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/categories/知识小集/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>知识小集</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-objective-c">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/categories/Objective-C/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Objective-C</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br>iOS 开发笔记</a>
 
   </li>
         
@@ -355,16 +321,16 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://qiancaox.github.io/2019/01/23/iOS-基于复用的同构分组卡片视图/">
+    <link itemprop="mainEntityOfPage" href="https://qiancaox.github.io/2019/03/28/从 WWDC 2018 220 Session 窥探 Auto Layout/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Luckeyhill.Xiang">
-      <meta itemprop="description" content="像山一样稳重，像海一样壮阔">
+      <meta itemprop="name" content="yeeshe">
+      <meta itemprop="description" content="积少成多，水滴石穿">
       <meta itemprop="image" content="/images/header.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Luckeyhill">
+      <meta itemprop="name" content="yeeshe">
     </span>
 
     
@@ -375,7 +341,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2019/01/23/iOS-基于复用的同构分组卡片视图/" class="post-title-link" itemprop="url">iOS-基于复用的同构分组卡片视图</a>
+                <a href="/2019/03/28/从 WWDC 2018 220 Session 窥探 Auto Layout/" class="post-title-link" itemprop="url">从 WWDC 2018 220 Session 窥探 Auto Layout</a>
               
             
           </h1>
@@ -389,7 +355,7 @@
 	      
 
               
-                <span class="post-meta-item-text">发布于2019-01-23</span>
+                <span class="post-meta-item-text">发布于2019-03-28</span>
               
 
             
@@ -410,7 +376,7 @@
               
 
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Objective-C/" itemprop="url" rel="index"><span itemprop="name">Objective-C</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/iOS-开发笔记/" itemprop="url" rel="index"><span itemprop="name">iOS 开发笔记</span></a></span>
 
                 
                 
@@ -446,11 +412,11 @@
 
       
         
-          <p>从iOS 11开发，系统多处采用了卡片式设计风格，加上一定程度上的阴影，提升了界面的立体感。当然不只是系统，淘宝、微信、京东等知名App的卡片也逐渐多了起来。</p>
+          <p>苹果公司早在 iOS 6 系统中就引入了 Auto Layout ，到目前为止，开发人员进行界面布局大致可以分为两类： Frame 、 Auto Layout 。使用 Frame 进行布局的开发者认为，这种方式更精确，并且性能优良，然而该方式过于原始，一方面在界面维护性差（杠精可能不这么觉得），另一方面在多屏幕适配上让人头疼。使用 Auto Layout 的开发者则认为，该方式在屏幕适配上占尽优势，在加入 了Interface Builder 后更是将“所见即所得”体现得淋漓尽致，但是最终形成视图显示时任然还是落实到 origin 和 size 上，从而中间会多出大量的根据约束、优先级等计算位置和大小的操作，一定程度上降低了性能，而且使用不当还极易造成崩溃。</p>
           <!--noindex-->
           
             <div class="post-button text-center">
-              <a class="btn" href="/2019/01/23/iOS-基于复用的同构分组卡片视图/#more" rel="contents">
+              <a class="btn" href="/2019/03/28/从 WWDC 2018 220 Session 窥探 Auto Layout/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -527,10 +493,10 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/header.jpg" alt="Luckeyhill.Xiang">
+              <img class="site-author-image" itemprop="image" src="/images/header.jpg" alt="yeeshe">
             
-              <p class="site-author-name" itemprop="name">Luckeyhill.Xiang</p>
-              <p class="site-description motion-element" itemprop="description">像山一样稳重，像海一样壮阔</p>
+              <p class="site-author-name" itemprop="name">yeeshe</p>
+              <p class="site-description motion-element" itemprop="description">积少成多，水滴石穿</p>
           </div>
 
           
@@ -623,10 +589,8 @@
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Luckeyhill.Xiang</span>
+  <span class="author" itemprop="copyrightHolder"> yeeshe</span>
+  <span class="author" itemprop="copyrightHolder"> 所有。</span>
 
   
 
@@ -634,7 +598,7 @@
 </div>
 
 
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+  <div class="powered-by">特别鸣谢：博客框架由<a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a>提供</div>
 
 
 
@@ -642,7 +606,7 @@
 
 
 
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v6.7.0</div>
+  <div class="theme-info">主题由<a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT</a>提供</div>
 
 
 

@@ -100,24 +100,30 @@
 
 
 
-  <meta name="description" content="我是一名来自成都的iOS开发者，从2015年开始从事iOS开发。 个人主页个人主页GitHub简书 联系方式E-mail：qiancaoxiang@gmail.com">
-<meta property="og:type" content="website">
-<meta property="og:title" content="关于">
-<meta property="og:url" content="https://qiancaox.github.io/about/index.html">
+  <meta name="description" content="苹果公司早在 iOS 6 系统中就引入了 Auto Layout ，到目前为止，开发人员进行界面布局大致可以分为两类： Frame 、 Auto Layout 。使用 Frame 进行布局的开发者认为，这种方式更精确，并且性能优良，然而该方式过于原始，一方面在界面维护性差（杠精可能不这么觉得），另一方面在多屏幕适配上让人头疼。使用 Auto Layout 的开发者则认为，该方式在屏幕适配上占尽优势">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从 WWDC 2018 220 Session 窥探 Auto Layout">
+<meta property="og:url" content="https://qiancaox.github.io/2019/03/28/从 WWDC 2018 220 Session 窥探 Auto Layout/index.html">
 <meta property="og:site_name" content="yeeshe">
-<meta property="og:description" content="我是一名来自成都的iOS开发者，从2015年开始从事iOS开发。 个人主页个人主页GitHub简书 联系方式E-mail：qiancaoxiang@gmail.com">
+<meta property="og:description" content="苹果公司早在 iOS 6 系统中就引入了 Auto Layout ，到目前为止，开发人员进行界面布局大致可以分为两类： Frame 、 Auto Layout 。使用 Frame 进行布局的开发者认为，这种方式更精确，并且性能优良，然而该方式过于原始，一方面在界面维护性差（杠精可能不这么觉得），另一方面在多屏幕适配上让人头疼。使用 Auto Layout 的开发者则认为，该方式在屏幕适配上占尽优势">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-24T06:17:41.337Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1858049-14eb0502b89e9ea1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1858049-6fdf087912e4eac2.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1858049-b33d65a2096577ef.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1858049-c57986cae44baac1.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1858049-5202337cd558eb51.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-03-28T01:08:12.787Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="关于">
-<meta name="twitter:description" content="我是一名来自成都的iOS开发者，从2015年开始从事iOS开发。 个人主页个人主页GitHub简书 联系方式E-mail：qiancaoxiang@gmail.com">
+<meta name="twitter:title" content="从 WWDC 2018 220 Session 窥探 Auto Layout">
+<meta name="twitter:description" content="苹果公司早在 iOS 6 系统中就引入了 Auto Layout ，到目前为止，开发人员进行界面布局大致可以分为两类： Frame 、 Auto Layout 。使用 Frame 进行布局的开发者认为，这种方式更精确，并且性能优良，然而该方式过于原始，一方面在界面维护性差（杠精可能不这么觉得），另一方面在多屏幕适配上让人头疼。使用 Auto Layout 的开发者则认为，该方式在屏幕适配上占尽优势">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1858049-14eb0502b89e9ea1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
 
 
 
-  <link rel="canonical" href="https://qiancaox.github.io/about/">
+  <link rel="canonical" href="https://qiancaox.github.io/2019/03/28/从 WWDC 2018 220 Session 窥探 Auto Layout/">
 
 
 
@@ -127,7 +133,7 @@
   };
 </script>
 
-  <title>关于 | yeeshe</title>
+  <title>从 WWDC 2018 220 Session 窥探 Auto Layout | yeeshe</title>
   
 
 
@@ -230,7 +236,7 @@
         
         
           
-          <li class="menu-item menu-item-关于 menu-item-active">
+          <li class="menu-item menu-item-关于">
 
     
     
@@ -301,67 +307,238 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qiancaox.github.io/2019/03/28/从 WWDC 2018 220 Session 窥探 Auto Layout/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yeeshe">
+      <meta itemprop="description" content="积少成多，水滴石穿">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yeeshe">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-<h1 class="post-title" itemprop="name headline">关于
-
-</h1>
-
-<div class="post-meta">
-  
-  
-
-
-
-</div>
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <p>我是一名来自成都的iOS开发者，从2015年开始从事iOS开发。</p>
-<h3 id="个人主页"><a href="#个人主页" class="headerlink" title="个人主页"></a>个人主页</h3><p><a href="qiancaox.github.io">个人主页</a><br><a href="https://github.com/qiancaox" target="_blank" rel="noopener">GitHub</a><br><a href="https://www.jianshu.com/u/14a1ad47fbf3" target="_blank" rel="noopener">简书</a></p>
-<h3 id="联系方式"><a href="#联系方式" class="headerlink" title="联系方式"></a>联系方式</h3><p>E-mail：<a href="mailto:qiancaoxiang@gmail.com" target="_blank" rel="noopener">qiancaoxiang@gmail.com</a></p>
+          <h1 class="post-title" itemprop="name headline">从 WWDC 2018 220 Session 窥探 Auto Layout
 
+              
+            
+          </h1>
         
-      </div>
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+
+	      
+
+              
+                <span class="post-meta-item-text">发布于2019-03-28</span>
+              
+
+            
+          </span>
+
+          
+            <span class="post-category">
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+	      
+
+              
+                <span class="post-meta-item-text">分类于</span>
+
+              
+
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/iOS-开发笔记/" itemprop="url" rel="index"><span itemprop="name">iOS 开发笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <p>苹果公司早在 iOS 6 系统中就引入了 Auto Layout ，到目前为止，开发人员进行界面布局大致可以分为两类： Frame 、 Auto Layout 。使用 Frame 进行布局的开发者认为，这种方式更精确，并且性能优良，然而该方式过于原始，一方面在界面维护性差（杠精可能不这么觉得），另一方面在多屏幕适配上让人头疼。使用 Auto Layout 的开发者则认为，该方式在屏幕适配上占尽优势，在加入 了Interface Builder 后更是将“所见即所得”体现得淋漓尽致，但是最终形成视图显示时任然还是落实到 origin 和 size 上，从而中间会多出大量的根据约束、优先级等计算位置和大小的操作，一定程度上降低了性能，而且使用不当还极易造成崩溃。</p>
+<a id="more"></a>
+<p>在 <a href="https://developer.apple.com/videos/play/wwdc2018/220" target="_blank" rel="noopener">High Performance Auto Layout</a> 中介绍说：苹果公司在 iOS 12 中大幅提高了Auto Layout的性能，使滑动达到了满帧。为了更清楚解释 Auto Layout ，我们将从以下几点进行探讨：<a href="#运行过程">运行过程</a> 、<a href="#自动布局的性能问题">自动布局的性能问题</a>、<a href="#自动布局的方案">自动布局的方案</a></p>
+<h2 id="运行过程"><a href="#运行过程" class="headerlink" title="运行过程"></a>运行过程</h2><p>Auto Layout 布局系统不仅仅是实现了 <a href="https://en.wikipedia.org/wiki/Cassowary_(software" target="_blank" rel="noopener">Cassowary</a>) 算法来解决用户界面中哪些相等和不等的关系，引入了“约束”的概念来抽象界面关系。它还是一套完整的布局引擎系统，用来统一管理布局的创建、更新和销毁，它主导了整个界面的布局。</p>
+<p><strong>首先</strong>，来看看自动布局的渲染过程。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1858049-14eb0502b89e9ea1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="渲染循环"></p>
+<p>苹果将一个渲染循环分为了3个步骤：更新约束、布局和显示：</p>
+<ol>
+<li>所有需要的视图会根据层级关系从顶至低依次调用<code>updateConstraints</code>来更新约束；</li>
+<li>接着，每个视图都会g根据层级关系沿着从低至顶的顺序依次执行<code>layoutSubviews</code>来进行布局；</li>
+<li>最终，获取到布局信息后，视图和布局一样的执行方式调用<code>drawRect</code>进行绘制，从而将内容显示在用户的屏幕上。</li>
+</ol>
+<p><strong>于是</strong>，基于此流程，苹果开放了一套 API 给开发者使用，目的就是避免大量的重复工作，导致性能的损失：</p>
+<ol>
+<li><code>setNeedsUpdateConstraints</code>，将 view 标记为需要更新约束，并在稍后触发<code>updateConstraitsIfNeed</code>;</li>
+<li><code>updateConstraitsIfNeeded</code>，系统自动调用该方法。但是只有被第1点标记了的 view 才会调用<code>updateConstraints</code>。该方法，开发者可以手动调用，但不需要重写。</li>
+<li><code>updateConstraints</code>，更新约束的方法。</li>
+<li><code>setNeedsLayout</code>，将 view 标记为需要重新布局，并在稍后自动触发<code>layoutIfNeeded</code>。当 view 的布局发生改变时，也会自动调用。</li>
+<li><code>layoutIfNeeded</code>，系统自动调用该方法。同样，只有被第4点标记的 view 才会调用<code>layoutSubviews</code>。该方法，开发者可以手动调用，但也不需要重写。</li>
+<li><code>layoutSubViews</code>，不能手动调用。</li>
+<li><code>setNeedsDisplay</code>，将视图标记为需要重新绘制，并且触发绘制循环执行<code>drawRect</code>。</li>
+<li><code>drawRect</code>，视图的绘制，不能手动调用。</li>
+</ol>
+<p>现在我们已经知道了 view 根据 Auto Layout 的绘制流程了，并且对苹果提供的 API 有了更为清晰的理解。</p>
+<p><strong>最后</strong>，我们再来聊聊布局引擎（以下简称：Engine）在渲染过程中起到的作用：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1858049-6fdf087912e4eac2.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Auto Layout Engine"></p>
+<p>在自动布局框架中，布局的计算核心是 Engine ，换句话说，我们从添加的约束到获取到 view 的大小和位置信息都是由 Engine 进行计算的。我们说 Auto Layout 实现了 Cassowary 算法，主导了界面的布局，更精确的说是 Engine 来完成。</p>
+<p>当然，光从上图很难看出 Engine 在渲染过程中起到的作用，我们结合 WWDC 进行理解。下面是一段原话：</p>
+<blockquote>
+<p>When the constraint is added what will happen is that we make an equation, which corresponds to the constraints, and we add that equation to the engine. The last object to understand in the diagram is that the equation is in terms of variables where a variable is like, you know, if I hand you an equation and I say solve for X, X is a variable. The things that we need to solve for in this case is the frame data of a view. So there will be four variables for every view, which is the min X, the min Y, the width, and the height.</p>
+</blockquote>
+<p>当我们给 view 添加约束（以下称：<code>NSLayoutConstraint</code>）时， Cocoa 会根据 <code>NSLayoutConstraint</code> 创建一个 Equation 的等式添加到 Engine 中，Engine 拿到等式后，依据 Cassowary 算法对 <code>NSLayoutConstraint</code> 中约定的变量（以下称：Variable）进行求解。求得结果后 view 通过 <code>layoutSubviews</code> 将 Engine 中的 Frame 拷贝出来，以供显示绘制使用。我们来看看代码是如何转化为 Equation 的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[NSLayoutConstraint constraintWithItem:view1</span><br><span class="line">                             attribute:NSLayoutAttributeLeft</span><br><span class="line">                             relatedBy:NSLayoutRelationEqual</span><br><span class="line">                                toItem:view2</span><br><span class="line">                             attribute:NSLayoutAttributeLeft</span><br><span class="line">                            multiplier:1</span><br><span class="line">                              constant:10]</span><br></pre></td></tr></table></figure>
+<p>Equation =&gt;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">view1.left = view2.left * 1 + 10</span><br></pre></td></tr></table></figure>
+<p>其中 view1.left 就是 <code>NSLayoutConstraint</code> 设置的 Variable ，需要 Engine 进行求解。</p>
+<p>经过这样的理解，我将我的理解绘制成这样一幅简图：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1858049-b33d65a2096577ef.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="how_engine_works"></p>
+<p>上图中，我将 Engine 的工作这样理解：每个 view 在显示自己之前即得到布局信息之前， Engine 会将视图、约束、优先级和固定大小通过计算转换成最终的 Frame ，在 Engine 中，每当约束发生变化就会触发名叫：Deffered Layout Pass 的容错处理，当这些工作完成后，视图的绘制也会随之一并完成。为了继续监听约束变化，渲染循环（ps：其实这里渲染循环和运行循环是否是同一个东西，查了很多资料也没说个所以然，但是不影响对 Auto Layout 的理解。所以先暂时叫 Application Run Loop 统一名称。）又进入监听约束变化的状态，等待下次响应。当监听到约束变化后，再次执行下一轮循环。</p>
+<p>这里有相关的参考链接：</p>
+<ol>
+<li><a href="https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/AutolayoutPG/ModifyingConstraints.html#//apple_ref/doc/uid/TP40010853-CH29-SW1" target="_blank" rel="noopener">Changing Constraints</a></li>
+</ol>
+<h2 id="自动布局的性能问题"><a href="#自动布局的性能问题" class="headerlink" title="自动布局的性能问题"></a>自动布局的性能问题</h2><p>上面我们对 Auto Layout 的运行过程进行了探讨。不难看出相对于 Frame 布局而言， Auto Layout 多出了对约束的更新、计算等操作，肯定会对效率产生一定的影响。然而这些影响如果在一次 Display 所允许的时间范围之内完成（60次/s），那么无论对开发者还是用户而言，都是可以接受的。在这章，我们一起来探讨影响 Auto Layout 性能的因素，从根儿上去理解这些问题，对我们将来开发工程中的取舍会有一定的帮助。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1858049-c57986cae44baac1.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="苹果官方数据"></p>
+<p>上图是来 <a href="https://developer.apple.com/videos/play/wwdc2018/202/" target="_blank" rel="noopener">What’s New in Cocoa Touch</a> 数据，从上图可以看出，无论是嵌套还是非嵌套的视图层级关系而言，在 iOS 12 优化了 Auto Layout 之后，基本上和手动布局一致，都不会因为视图数量或嵌套层数的增加而导致性能的损耗成指数上升。那么导致优化前，性能成指数损耗的锅就应该由 Cassowary 来背吗？</p>
+<blockquote>
+<p>Cassowary is an incremental constraint solving toolkit that efficiently solves systems of linear equalities and inequalities.</p>
+</blockquote>
+<p>就 Cassowary 算法本身而言，是1997年就被发表并被称作高效的线性方程求解的算法，解决的是界面的线性规划问题，而线性规划问题的解法是单纯型法–<a href="https://en.wikipedia.org/wiki/Simplex" target="_blank" rel="noopener">Simplex</a>。单从 Simplex 算法看，大多数情况下是没有呈指数时间复杂度的。而 Cassowary 是在 Simplex 的基础上，为解决用户界面实践中的应用和改进算法，最重要的是提出了“增量”的概念。从这个维度上来看， Cassowary 不能背这口黑锅。</p>
+<p>那么，如果 Cassowary 算法本身是没有问题的话，那就只可能是 iOS 12 之前在实现算法时，并没有体现出增量的概念。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1858049-5202337cd558eb51.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="how_system_getting_size_from_engine"></p>
+<p>在 WWDC 2018 220 Session 中提到，系统从 Engine 中获取 view 的大小可分为以下几步：</p>
+<ol>
+<li>创建一个 Engine 对象；</li>
+<li>约束被添加到 Engine 中；</li>
+<li>Engine 计算出所有的布局信息；</li>
+<li>view 从 Engine 中拷贝出布局信息；</li>
+<li>Engine 对象呗销毁。</li>
+</ol>
+<p>咋眼一看似乎没有什么问题，但是如果每次细微的更新约束都需要从0开始，新的计算引擎对象都要重新计算，当约束变关系变多时，最终会导致计算量的指数上升。</p>
+<p>显然苹果早就注意到这个问题，在 iOS 12 中找到了并实现了解法。当然，性能是否真的如视频所说？这里有一篇文章，对 Auto Layout 进行了比较深入的测试：<a href="http://www.cocoachina.com/ios/20181106/25391.html" target="_blank" rel="noopener">点击查看</a>。</p>
+<p>综上所述，尽管苹果一直在对 Auto Layout 进行优化升级，但目前为止，任然不如 Frame 布局来的直接、有效，然而这只是在相对极端的情况下才会出现，通常我们遇到的开发需求中是不会出现这种情况的。最终我们可以粗暴的认为： <strong>Auto Layout 具有了和手写布局几乎一致的高性能。</strong></p>
+<h2 id="自动布局的方案"><a href="#自动布局的方案" class="headerlink" title="自动布局的方案"></a>自动布局的方案</h2><p>除了上面探讨的 Auto Layout 性能问题之外， Auto Layout 框架的易用性也是影响其使用的关键因素之一。苹果公司自然比我们更清楚这一点的重要性。所以，后来又提供 <a href="https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/AutolayoutPG/VisualFormatLanguage.html" target="_blank" rel="noopener">VFL</a> 这种 DSL 语言来简化 Auto Layout 的写法。再到后来，苹果紧随前端响应式布局– Flexbox 的思路，基于 Auto Layout 封装了 <code>UIStackView</code> 来提高响应式布局的开发效率。当然，这里我们不去着重探讨上述的布局方案，而是简单阐述以下几种 Auto Layout 方案的优缺点，以供大家选择：</p>
+<ol>
+<li><code>NSLayoutConstraint</code> 实现 Auto Layout</li>
+</ol>
+<p>上述我们提到了苹果使用 <code>NSLayoutConstraint</code> 来体现了 Cassowary 的约束的概念，并且苹果在 Auto Layout 框架中也只提供了它所对应的一套 API 供开发者使用，也就是说任何基于自动布局技术的其他方案都必然会通过 <code>NSLayoutConstraint</code> 来实现。</p>
+<p>从上面的代码中，可以看出 <code>NSLayoutConstraint</code> 的可阅读性还是很好的，然而对开发过程中，多如牛毛的约束，显然这种方式是不可取得，太影响开发效率了。</p>
+<ol start="2">
+<li>苹果自家的可视化编辑方案：Interface Builder</li>
+</ol>
+<p>我认为 Interface Builder 是一个革命性的突破。在没有它之前，我们的所有控件都必须通过代码初始化，设置 frame ，设置各种属性，然后 <code>addSubview</code> 到父视图上。这部分工作重复且毫无意义，直到 IB 的出现，它让 iOS 开发工程能够更容易的构建 App 的视图，并且更直观的进行视图编辑，只是简单的通过点击选择、拖拽等操作就可完成，最后通过 <code>IBOutlet</code> 将 IB 中的控件连接到代码中，供开发者直接使用。更多的时间都投入到业务开发中去，大大的提高了工程师的开发效率。（ps：我之前注意到，相同的需求，相同的迭代周期，相同的界面，Android由3个开发同时进行，iOS由2个开发同时开发，最终iOS完成迭代开发的时间早于Android2天，并且从高保真的还原度上而言也是得到了UI同事的赞扬的！）</p>
+<p>难道 IB 真的就这么完美，找不出缺点吗？</p>
+<p>答案是否定的。 IB 在有如此高效且易用的有点下，缺点也是十分明显：</p>
+<ul>
+<li>IB 本质上也是一个 XML 文件，最终呈现成 view 时还是会转化成代码来完成，从而 IB 的执行效率低于手写代码；</li>
+<li>在多团队开发中容易造成错误；</li>
+<li>不利于代码的封装和工程架构的组织等；</li>
+<li>学习成本相对较高。</li>
+</ul>
+<ol start="3">
+<li><code>Masonry</code> 三方框架</li>
+</ol>
+<p>你或许没有使用过 IB 进行界面开发，但是我相信 <code>Masonry</code> 你一定用过。它是基于 Auto Layout 的链式封装，不仅简化了 <code>NSLayoutConstraint</code> 带来繁杂的工作量，还更加清晰明了的解释了视图之间的约束关系。目前从我所经历的需求池看来， <code>Masonry</code> 都能够完成。毕竟是基于“老祖宗”的。虽然，时至今日，开发者也发现了很多它的问题，但这都是后话了，也不属于我们需要在这里探讨的话题了。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这篇文章是我在观看了 WWDC 2018 220和202 之后对 Auto Layout 一些感悟或者理解。我们从原理上探讨了自动布局技术的运行过程和自动布局的性能问题，并简单的提到了苹果在布局引擎中利用 Cassowary 算法进行线性规划问题的求解，对以后开发过程中遇到的问题能有更深层次的解释，自然也能更容易解决这些问题。又简单的总结了3中自动布局方案，并分别简述了各自的优缺点，希望能够为技术选型时提供一些参考。</p>
+
       
     </div>
-    
-
-
 
     
+
     
     
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
   </div>
 
 
@@ -497,7 +674,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#个人主页"><span class="nav-number">1.</span> <span class="nav-text">个人主页</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#联系方式"><span class="nav-number">2.</span> <span class="nav-text">联系方式</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#运行过程"><span class="nav-number">1.</span> <span class="nav-text">运行过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自动布局的性能问题"><span class="nav-number">2.</span> <span class="nav-text">自动布局的性能问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自动布局的方案"><span class="nav-number">3.</span> <span class="nav-text">自动布局的方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li></ol></div>
             
 
           </div>
