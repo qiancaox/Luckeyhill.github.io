@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/header.jpg?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/header.jpg?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/header.jpg?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/header.jpg?v=6.7.0" color="#222">
+
+
+  <link rel="manifest" href="/images/header.jpg">
+
+
+  <meta name="msapplication-config" content="/images/header.jpg">
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="MVVM 起源于2005年，由微软的架构师 John Gossman 提出的一种架构模式，并在 WPF 和 Silverlight 中使用。它是 MVC 的一种衍生架构，通过“绑定”机制将 Controller 中的业务代码脱离出来，从而促进了 UI 层与逻辑代码的分离。 RxSwift 是 ReactiveX 的 Swift 版本，扩展了观察者模式，是一套基于异步事件的响应式编程框架。 这两个神">
+<meta property="og:type" content="article">
+<meta property="og:title" content="当 MVVM 邂逅 RxSwift">
+<meta property="og:url" content="https://qiancaox.github.io/2019/04/18/当 MVVM 邂逅 RxSwift/index.html">
+<meta property="og:site_name" content="yeeshe">
+<meta property="og:description" content="MVVM 起源于2005年，由微软的架构师 John Gossman 提出的一种架构模式，并在 WPF 和 Silverlight 中使用。它是 MVC 的一种衍生架构，通过“绑定”机制将 Controller 中的业务代码脱离出来，从而促进了 UI 层与逻辑代码的分离。 RxSwift 是 ReactiveX 的 Swift 版本，扩展了观察者模式，是一套基于异步事件的响应式编程框架。 这两个神">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2058564545,654273587&fm=26&gp=0.jpg">
+<meta property="og:image" content="http://cc.cocimg.com/api/uploads/20150525/1432542173109354.png">
+<meta property="og:image" content="https://objccn.io/images/issues//issue-13/mvvm.png">
+<meta property="og:image" content="http://cc.cocimg.com/api/uploads/20150525/1432542301497557.gif">
+<meta property="og:updated_time" content="2019-04-18T13:04:54.511Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="当 MVVM 邂逅 RxSwift">
+<meta name="twitter:description" content="MVVM 起源于2005年，由微软的架构师 John Gossman 提出的一种架构模式，并在 WPF 和 Silverlight 中使用。它是 MVC 的一种衍生架构，通过“绑定”机制将 Controller 中的业务代码脱离出来，从而促进了 UI 层与逻辑代码的分离。 RxSwift 是 ReactiveX 的 Swift 版本，扩展了观察者模式，是一套基于异步事件的响应式编程框架。 这两个神">
+<meta name="twitter:image" content="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2058564545,654273587&fm=26&gp=0.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="https://qiancaox.github.io/2019/04/18/当 MVVM 邂逅 RxSwift/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>当 MVVM 邂逅 RxSwift | yeeshe</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yeeshe</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-ios-开发笔记">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br>iOS 开发笔记</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-关于">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qiancaox.github.io/2019/04/18/当 MVVM 邂逅 RxSwift/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yeeshe">
+      <meta itemprop="description" content="积少成多，水滴石穿">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yeeshe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">当 MVVM 邂逅 RxSwift
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+
+	      
+
+              
+                <span class="post-meta-item-text">发布于2019-04-18</span>
+              
+
+            
+          </span>
+
+          
+            <span class="post-category">
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+	      
+
+              
+                <span class="post-meta-item-text">分类于</span>
+
+              
+
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/iOS-开发笔记/" itemprop="url" rel="index"><span itemprop="name">iOS 开发笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel" target="_blank" rel="noopener">MVVM</a> 起源于2005年，由微软的架构师 John Gossman 提出的一种架构模式，并在 <a href="https://en.wikipedia.org/wiki/Windows_Presentation_Foundation" target="_blank" rel="noopener">WPF</a> 和 <a href="https://en.wikipedia.org/wiki/Microsoft_Silverlight" target="_blank" rel="noopener">Silverlight</a> 中使用。它是 <a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller" target="_blank" rel="noopener">MVC</a> 的一种衍生架构，通过“绑定”机制将 Controller 中的业务代码脱离出来，从而促进了 UI 层与逻辑代码的分离。</p>
+<p><a href="https://beeth0ven.github.io/RxSwift-Chinese-Documentation/" target="_blank" rel="noopener">RxSwift</a> 是 <a href="http://reactivex.io/" target="_blank" rel="noopener">ReactiveX</a> 的 Swift 版本，扩展了<a href="https://zh.wikipedia.org/wiki/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F" target="_blank" rel="noopener">观察者模式</a>，是一套基于异步事件的响应式编程框架。</p>
+<p>这两个神奇的技术碰撞到一起会有什么样的火花呢？下面，我将从以下几方面来简述我在使用它们时的一些感悟（纯属个人理解）：<a href="#MVC">MVC</a>、<a href="#MVVM">MVVM</a>、<a href="#RxSwift">RxSwift</a>、<a href="#MVVM邂逅RxSwift">MVVM邂逅RxSwift</a></p>
+<a id="more"></a>
+<h2 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h2><p>MVC 可以说是一套最经典的客户端开发架构，同时苹果官方也是极力推崇的架构模式。它将项目分为：Model、View、Controller 三个层级，它们的关系如下图所示：</p>
+<p><img src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2058564545,654273587&amp;fm=26&amp;gp=0.jpg" alt="图解MVC"></p>
+<p>上图清晰的展示的它们三者的关系，Model 代表数据，View 带边视图，Controller 则负责帮助它们建立关系：</p>
+<ol>
+<li>Model：指模型，数据的抽象，表示业务规则；</li>
+<li>View：用户界面，展示模型返回的数据，接受并传递用户交互；</li>
+<li>Controller：响应用户交互，并映射为用户行为，从而修改模型数据指示界面更新。</li>
+</ol>
+<p>Controller ，通过 data source 和 delegate 来更新视图，通过 outlet 持有视图。View 则通过 action-target 的方式传递用户事件。同时 Controller 接收到 View 传递的事件后直接修改持有的 Model ，引发 Model 的观察者（KVO）或通知机制告知 Controller ，data source 需要工作来更改 View。</p>
+<p>这样的工作方式看起来井井有条，实际上却很难有效得将这三者区分开来，特别是苹果还设计了 <code>UIViewController</code> ，这就更加难于区分 Controller 和 View 了。在我看来苹果设计的 <code>UIViewController</code> 只是为视图提供一个容器，也就是说 Controller 中的 view 属性应该叫做 <strong>view container</strong> 更为贴切。</p>
+<p>另外，由于 View 和 Model 相互独立，导致了 Controller 中的业务代码会随着业务的增加而日益庞大起来，最终导致了 <a href="https://twitter.com/Colin_Campbell/status/293167951132098560" target="_blank" rel="noopener">Massive View Controller</a> 的出现，使 Controller 不利于维护。再加上网络层在该框架下也并没有确切的定位，也导致了网络放哪里都不合适的错觉。</p>
+<p><strong>提示：在服务端的开发中，javabean+jsp+servlet，能够很贴切的体现 MVC 架构思想。</strong></p>
+<h2 id="MVVM"><a href="#MVVM" class="headerlink" title="MVVM"></a>MVVM</h2><p>由于 MVC 在实现时，不易区分各个功能模块的界线和 Controller 过于厚重等问题被暴露后，由微软架构师 John Gossman 在 MVC 的基础上优化衍生，并于2005年提出的 MVVM 则完美的解决了这一问题，促进了 UI 和业务逻辑的分离。</p>
+<p>首先，在 MVVM 中，项目被分为了：Model、View、ViewModel 3个模块：</p>
+<p><img src="http://cc.cocimg.com/api/uploads/20150525/1432542173109354.png" alt="MVC和MVVM对比图"></p>
+<p>通过上图，可以看出，实际上新架构中的 ViewModel 抢去了原来 Controller 的部分工作，从而解决了控制器过于厚重的问题。而它们的关系如下图所示：</p>
+<p><img src="https://objccn.io/images/issues//issue-13/mvvm.png" alt="MVVM关系图"></p>
+<p>我们可以这样理解它的各个模块：</p>
+<ol>
+<li>Model：和 MVC 中的一致，依然表示对数据的抽象，体现了业务的规则；</li>
+<li>ViewModel：新架构增加的中间层，用于管理视图和模型之间的相互影响的因果关系。换句话说：模型的改变可能会影响视图对应的改变，而视图的改变也可能会引发模型作出相应的改动，最初这部分工作是由控制器来做的，现在 MVVM 中则由 ViewModel 来实现，而至于它们之间的相互影响的关系是使用 KVO 还是 Rx 只是具体的实现技术而已，与架构本身并没有关系；</li>
+<li>View：将模型返回的数据用最高可读性的方式表达给用户，响应并传递用户交互；</li>
+</ol>
+<p>我认为这三个模块并不完整，因为项目中有众多的 View 和 ViewModel ，然而它们的关系需要 Controller 来建立，也就是“绑定”，所以还应该补充一点：</p>
+<p><img src="http://cc.cocimg.com/api/uploads/20150525/1432542301497557.gif" alt="MVMCV"></p>
+<ol start="4">
+<li>Controller：完成 View、ViewMode 二者的关系建立。</li>
+</ol>
+<p>经过这样的演进，最终大量的逻辑代码将被移动到 ViewModel 中，从而 Controller 只需要管理视图以及视图和 ViewModel 之间的绑定关系，达到了更轻量级的控制的目的。同时，无处安放的网络请求也将由 ViewModel 实现，并提供 Command 的接口给 Controller 调用。</p>
+<p>另外，由于 <code>UIViewController</code> 和 <code>UIView</code> 只是不同的组件而已，在苹果的实现中通常都是对应出现的，能看到 View ，那么就一定能找到一个对应的 Controller ，能出现一个 Controller ，也一定能找多至少一个 View ，所以索性就将它们两个看成一个模块，只是递进关系不同，功能存在包含而已。基于这样的考虑，我在项目结构上大致如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">-------------------------</span><br><span class="line">|          ...          |</span><br><span class="line">|                       |</span><br><span class="line">|         Model         |</span><br><span class="line">|                       |</span><br><span class="line">|         |  /|\        |</span><br><span class="line">|         |   |         |</span><br><span class="line">|        \|/  |         |</span><br><span class="line">|                       |</span><br><span class="line">|       ViewModel       |</span><br><span class="line">|                       |</span><br><span class="line">|         |  /|\        |</span><br><span class="line">|         |   |         |</span><br><span class="line">|        \|/  |         |</span><br><span class="line">|                       |</span><br><span class="line">|   View &amp; Controller   |</span><br><span class="line">|                       |</span><br><span class="line">|          ...          |</span><br><span class="line">-------------------------</span><br></pre></td></tr></table></figure>
+<p>这是一个比较受争议的划分，只是在我看来如果非要严格的区分控制器和视图，在某种情况下会让架构失去灵活性，增加开发难度，不利于实践使用。例如：我要实现一个全局配置的功能，实际上我只需要很少量的视图组件就能完成，这个时候还非得区分 View 和 Controller，反倒没有直接将 <code>UIViewController</code> 即看作控制器又看作视图来的直接，而真正的业务模块的确应该坚持职责单一原则，区分得足够详细，后期维护就能够事半功倍。</p>
+<p>我们再将视线移回到模块职业上。</p>
+<p>MVVM 作为 MVC 的升级版，优化了随着业务的增加导致了 Controller 逐渐臃肿等问题，那么升级过后的模块又是怎么样的职业划分的呢？</p>
+<p>首先，模型做为数据的抽象，它体现了业务的形态，所以模型的实现一定是根据具体业务进行抽象，例如：我们有一个网上的商品交易系统，现在要做商品的买卖需求。在这个需求中，买东西一定需要定位到单一的商品，买家和卖家也一定要形成唯一关系，从而我们在设计 order 模型时，一定就需要有字段能够接受商品的唯一id，卖家的唯一id和买家的唯一id，这样一来，谁要买谁的什么商品的需求就抽象成 order 的模型来体现了！</p>
+<p>所以在我看来，如果模型所做的事情超出了了业务形态的范围，那么就不算是一个优秀的设计。当然，作为数据的载体，它也应该提供相应的数据读写接口，供其他模块调用。（这也是我认为“胖 model”不合理的原因）</p>
+<p>接下来再来看看重头戏：ViewModel。作为 Controller 的小弟，它帮助控制完成了大量的工作，那么那些工作应该由它来做呢？我归纳了以下几点（可能有点片面）：</p>
+<ol>
+<li>使用抽象模型作为载体修改和更新数据。数据作为系统核心价值的体现，用户通过点击、拖拽等操作 View ，通过 ViewModel 来控制模型进而修改数据，一方面这样能够降低核心数据被恶意窜改的风险，另外，对开发者而言，这样的设计能够提高代码的可维护性；</li>
+<li>作为 View 和 Model 之间的桥梁，那么视图的显示逻辑部分应该由 ViewModel 来完成；</li>
+<li>应该具备或持有 Model ，进而能够修改 Model 所代表的数据；</li>
+<li>提供输入和输出接口，方便 Controller 进行绑定调用；</li>
+<li>实现网络请求，并将结果序列化为对应模型。</li>
+<li>其他…</li>
+</ol>
+<p>以上的小点是我在使用中真实所使用到的场景，可能不全面，等遇到的时候再添加吧。</p>
+<p>最后，Controller 作为控制器，应该管理视图容器（也就是自己的 <code>view</code>）的生命周期，生成子视图并放入到视图容器中一并管理，将 ViewModel 进行绑定完成特定的业务场景。</p>
+<h2 id="RxSwift"><a href="#RxSwift" class="headerlink" title="RxSwift"></a>RxSwift</h2><p>上面我们有讲到实现 MVVM 无论采用 KVO 还是 Rx 都只是实现的技术不同而已，与架构本身没有关系。就 Rx 而言，它本身是一套基于异步事件的响应式框架而已。只是它让 MVVM 的实现更加优美，所以当提到 MVVM 的时候，首先想到的正是 Rx。起初在 RAC 还没有开发出来的时候，MVVM并不是如此火热（至少在 iOS 上是这样的），应该说是 RAC 奠定了 MVVM 的崛起。</p>
+<p>Rx 是 ReactiveX 的缩写，而 ReactiveX 一个基于异步事件的响应式库。它基于观察者模式，支持异步数据和事件序列，通过简单的运算符就能实现对这些序列的订阅、组合、转换等，而不需要去关心线程，同步，线程安全，并发数据以及I/O阻塞。并且它还是一套跨平台的响应式标准，可以到达一处学会到处使用。</p>
+<p>了解了 Rx 是什么之后，我们来了解下它作用是什么（至少在 iOS 中）？下面我们通过具体场景来看看它充当了什么角色：</p>
+<p>(1). 登陆界面中，我们有一个电话号的输入框，要求输入框需要验证电话号是否正确；</p>
+<ul>
+<li>如果我们使用原始技术实现的话，我们可能会使用这几种事件传递的方法处理：<code>delegate</code>、<code>notifinotion</code>、<code>target-action</code>、<code>KVO</code> 等等；</li>
+<li>而 Rx 则统一这些传递方法为信号传递，我们只需要将上面提到的方法全部替换为 <code>rx</code> 所代表的信号链就能完成相同的工作。</li>
+</ul>
+<p>下面是一个简单示例，仅供参考：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">#program mark - 原始技术</span><br><span class="line"></span><br><span class="line">textField.addTarget(self, action: #selector(textField(didEditingChanged:)), for: .editingChanged)</span><br><span class="line"></span><br><span class="line">@objc</span><br><span class="line">func textField(didEditingChanged sender: UITextField) &#123;</span><br><span class="line">    var text = sender.text</span><br><span class="line">    if text.valid(type: .phone) &#123;</span><br><span class="line">        // 这里实现通过电话验证的逻辑</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        // 这里实现未通过电话验证的逻辑</span><br><span class="line">    &#125;</span><br><span class="line">    // 最终逻辑</span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">#program mark - RxSwift</span><br><span class="line"></span><br><span class="line">textField.rx.text.orEmpty</span><br><span class="line">        .map &#123;</span><br><span class="line">            // 实现电话号验证的逻辑</span><br><span class="line">            $0.valid(.phone)</span><br><span class="line">        &#125;</span><br><span class="line">        .subscribe &#123;</span><br><span class="line">            // 最终逻辑</span><br><span class="line">        &#125;</span><br><span class="line">        .disposed(by: disposeBag)</span><br></pre></td></tr></table></figure>
+<p>(2). 在 MVVM 中，为数据绑定提供了更加方便及优美的实现方案。</p>
+<p>当然，它的作用远不止于此，只是就本文的主题而言，我认为这两点已经足够了。</p>
+<p><code>Observables</code> 可以算是 Rx 的核心了，正是它让我们可以对任意异步事件柳进行随意的组合。例如：使用它来作为网络请求的返回值，那么我们从代码的阅读性上就可以看作是一次同步过的过程了，而处理回调只需要订阅它对应的事件即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">func resume() -&gt; Observable&lt;T&gt; &#123;</span><br><span class="line">    return Observable&lt;T&gt;.create &#123; observer -&gt; Disposable in</span><br><span class="line">        let request = Alamofire.request(self.url,</span><br><span class="line">                                        method: self.method,</span><br><span class="line">                                        parameters: self.parameters,</span><br><span class="line">                                        encoding: self.encoding,</span><br><span class="line">                                        headers: self.headers)</span><br><span class="line">            .responseData &#123;</span><br><span class="line">                if let error = $0.error &#123;</span><br><span class="line">                       observer.onError(error)</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    if let data = $0.data &#123;</span><br><span class="line">                        do &#123;</span><br><span class="line">                            observer.onNext(try JSONDecoder().decode(T.self, from: data))</span><br><span class="line">                            observer.onCompleted()</span><br><span class="line">                        &#125; catch &#123;</span><br><span class="line">                            observer.onError(error)</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        return Disposables.create &#123;</span><br><span class="line">            request.cancel()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>经过这样封装后的网络请求更像是同步的操作，因为发送后立即就能得到一个可观察的返回值，而我们只需要监听返回值的相应事件即可，一定程度上简化了异步的思想。</p>
+<p>当然，以上两点只是 Rx 的一些应用而已，它的功能其实远不止于此，更多的内容还有待继续探究。</p>
+<p>其实函数式编程和响应式编程还是有很大区别的，官方文档中式这样描述的：</p>
+<blockquote>
+<p>One main point of difference is that functional reactive programming operates on values that change continuously over time, while ReactiveX operates on discrete values that are emitted over time. </p>
+</blockquote>
+<p>在这里我们就不具体讨论这两者的区别。</p>
+<h2 id="MVVM邂逅RxSwift"><a href="#MVVM邂逅RxSwift" class="headerlink" title="MVVM邂逅RxSwift"></a>MVVM邂逅RxSwift</h2><p>通过上面的三个小章节，我们一起了解了 MVC ，MVVM 以及 RxSwift 。这章节中，我将以“登录”模块作为示例，简示 MVVM 和 RxSwift 会碰撞出什么样的火花。</p>
+<blockquote>
+<p>需求：登录界面中需要填入用户名和密码“登录”按钮才能点击，点击后进行网络请求，成功提示“登录成功”，失败提示具体原因。</p>
+</blockquote>
+<p>在实现 UI 时，我为了更好的区分 Controller 和 View，我将用户名输入框、密码输入框以及按钮放在了单独的 <code>SignContentScrollView</code> 中，并将这三个空间作为公用接口暴露出来，代码如下：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SignContentScrollView</span>: <span class="title">UIScrollView</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">weak</span> <span class="keyword">var</span> panguLogoImageView: <span class="type">UIImageView</span>!</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">weak</span> <span class="keyword">var</span> titleLabel: <span class="type">UILabel</span>!</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">weak</span> <span class="keyword">var</span> inputContainer: <span class="type">UIView</span>!</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">weak</span> <span class="keyword">var</span> usernameTextField: <span class="type">UITextField</span>!</span><br><span class="line">    <span class="keyword">weak</span> <span class="keyword">var</span> passwordTextField: <span class="type">UITextField</span>!</span><br><span class="line">    <span class="keyword">weak</span> <span class="keyword">var</span> signButton: <span class="type">UIButton</span>!</span><br><span class="line">    <span class="keyword">weak</span> <span class="keyword">var</span> forgetButton: <span class="type">UIButton</span>!</span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>View 层算是解决了，接下来看看 ViewModel 应该如何设计？</p>
+<p>ViewModel 作为视图和模型的桥梁，它不仅能够修改或获取模型，还能够响应用户交互和跟新用户界面，我更倾向于将它理解为一座“工厂”，用户界面给它提供“原材料”，经过加工后输出形成可直接使用的产品，这里的加工就是具体的业务逻辑了。结合 Swift 面向协议的特点，可以抽象一个 <code>ViewModelType</code> 的协议：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">fileprivate struct ViewModelTypeAssociateKey &#123;</span><br><span class="line">    static var disposeBag: String = &quot;disposeBag&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">protocol ViewModelType &#123;</span><br><span class="line">    </span><br><span class="line">    associatedtype Inputs</span><br><span class="line">    associatedtype Outputs</span><br><span class="line">    </span><br><span class="line">    // 用于管理 Observable 的释放，通过协议的扩展直接给予默认值</span><br><span class="line">    var disposeBag: DisposeBag &#123; get &#125;</span><br><span class="line">    </span><br><span class="line">    var inputs: Inputs &#123; get &#125;</span><br><span class="line">    var outputs: Outputs &#123; get &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">extension ViewModelType &#123;</span><br><span class="line">   </span><br><span class="line">    var disposeBag: DisposeBag &#123;</span><br><span class="line">        get &#123;</span><br><span class="line">            guard let bag = (objc_getAssociatedObject(self, &amp;ViewModelTypeAssociateKey.disposeBag) as? DisposeBag) else &#123;</span><br><span class="line">                let bag = DisposeBag()</span><br><span class="line">                objc_setAssociatedObject(self, &amp;ViewModelTypeProtocolAssociateKey.disposeBag, bag, .OBJC_ASSOCIATION_RETAIN)</span><br><span class="line">                return bag</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            return bag</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样我们就有了一个协议来实现对所有 ViewModel 的公共抽象。它具有一个输入和一个输出的结构体，结构体中都会使用 Rx 的 Observable 的对象组成，通过对 Observable 订阅可以实现随时的监听。当落实到具体的登录业务时，<code>ViewModelType</code> 就可以这样实现了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">class SignViewModel: ViewModelType &#123;</span><br><span class="line">    </span><br><span class="line">    struct Inputs &#123;</span><br><span class="line">        let username: AnyObserver&lt;String&gt;</span><br><span class="line">        let password: AnyObserver&lt;String&gt;</span><br><span class="line">        let signCommand: AnyObserver&lt;Void&gt;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    struct Outputs &#123;</span><br><span class="line">        let validSignSignal: Observable&lt;Bool&gt;</span><br><span class="line">        let signStatusSignal: Observable&lt;RequestStatus&gt;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    var inputs: Inputs</span><br><span class="line">    var outputs: Outputs</span><br><span class="line">    </span><br><span class="line">    private let usernameSubject = ReplaySubject&lt;String&gt;.create(bufferSize: 1)</span><br><span class="line">    private let passwordSubject = ReplaySubject&lt;String&gt;.create(bufferSize: 1)</span><br><span class="line">    private let signCommandSubject = PublishSubject&lt;Void&gt;()</span><br><span class="line">    private let signStatusSubject = PublishSubject&lt;RequestStatus&gt;()</span><br><span class="line">    </span><br><span class="line">    private var loginByNameApi: String &#123;</span><br><span class="line">        get &#123;</span><br><span class="line">            let paths = &quot;/&quot;+kSSODirectionPath+&quot;/&quot;+kLoginByNameApi</span><br><span class="line">            guard let api = BaseURLModel.default.SSOApi else &#123;</span><br><span class="line">                return paths</span><br><span class="line">            &#125;</span><br><span class="line">            return api+paths</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    private var username: String = &quot;&quot;</span><br><span class="line">    private var passowrd: String = &quot;&quot;</span><br><span class="line">    </span><br><span class="line">    init() &#123;</span><br><span class="line">        inputs = Inputs(username: usernameSubject.asObserver(), password: passwordSubject.asObserver(), signCommand: signCommandSubject.asObserver())</span><br><span class="line">        outputs = Outputs(validSignSignal: Observable&lt;Bool&gt;.combineLatest(usernameSubject, passwordSubject) &#123; $0.count &gt; 0 &amp;&amp; $1.count &gt; 0 &#125;, signStatusSignal: signStatusSubject)</span><br><span class="line">        </span><br><span class="line">        usernameSubject.asObserver()</span><br><span class="line">            .bind(to: self.usernameBinder)</span><br><span class="line">            .disposed(by: disposeBag)</span><br><span class="line">        </span><br><span class="line">        passwordSubject.asObserver()</span><br><span class="line">            .bind(to: self.passwordBinder)</span><br><span class="line">            .disposed(by: disposeBag)</span><br><span class="line">        </span><br><span class="line">        signCommandSubject</span><br><span class="line">            .subscribe(onNext: &#123; [unowned self] in</span><br><span class="line">                self._respondsToSignIn()</span><br><span class="line">            &#125;)</span><br><span class="line">            .disposed(by: disposeBag)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    private func _respondsToSignIn() &#123;</span><br><span class="line">        self.signStatusSubject.onNext(.doing)</span><br><span class="line">        YSNetWorking&lt;BaseModel&lt;SignDataModel&gt;&gt;(url: loginByNameApi)</span><br><span class="line">            .method(.post)</span><br><span class="line">            .parameters([&quot;name&quot;: self.username, &quot;password&quot;: self.passowrd, &quot;systemCode&quot;: &quot;ISCC_MOBILE&quot;])</span><br><span class="line">            .resume()</span><br><span class="line">            .subscribe(onNext: &#123; (response) in</span><br><span class="line">                if response.code == 200 &#123;</span><br><span class="line">                    self.signStatusSubject.onNext(.success)</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    self.signStatusSubject.onNext(.failed(message: response.msg))</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;, onError: &#123; (error) in</span><br><span class="line">                self.signStatusSubject.onNext(.failed(message: &quot;网络似乎发生了错误!&quot;))</span><br><span class="line">            &#125;)</span><br><span class="line">            .disposed(by: self.disposeBag)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">extension SignViewModel &#123;</span><br><span class="line">    </span><br><span class="line">    private var usernameBinder: Binder&lt;String&gt; &#123;</span><br><span class="line">        return Binder(self) &#123; $0.username = $1 &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    private var passwordBinder: Binder&lt;String&gt; &#123;</span><br><span class="line">        return Binder(self) &#123; $0.passowrd = $1 &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>usernameSubject</code>、<code>passwordSubject</code>、<code>signCommandSubject</code> 作为 inputs 的桥梁来链接外部参数和内部业务，可以让我们不需要通过方法将 input 和 output 进行转化，Controller 中只需要将输入信号和 inputs 中对应的信号绑定，内部就能通过桥梁信号监听相应的变化。</p>
+<p>在 extension 中，通过数据绑定，将 <code>usernameSubject</code> 和 <code>passwordSubject</code> 的改变值绑定至 <code>username</code> 和 <code>password</code> 中，就是用户的交互改变数据模型的操作，网络请求时就能直接使用正确的值作为参数进行传递，绑定代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">usernameSubject.asObserver()</span><br><span class="line">            .bind(to: self.usernameBinder)</span><br><span class="line">            .disposed(by: disposeBag)</span><br><span class="line">        </span><br><span class="line">passwordSubject.asObserver()</span><br><span class="line">            .bind(to: self.passwordBinder)</span><br><span class="line">            .disposed(by: disposeBag)</span><br></pre></td></tr></table></figure>
+<p>登录按钮的验证通过对 <code>usernameSubject</code>、<code>passwordSubject</code> 的组合，验证用户名和密码是否合规，最终转化为 <code>Observable&lt;Bool&gt;</code> 的对象，供按钮的 <code>isEnable</code> 直接绑定：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Observable&lt;Bool&gt;.combineLatest(usernameSubject, passwordSubject) &#123; $0.count &gt; 0 &amp;&amp; $1.count &gt; 0 &#125;</span><br></pre></td></tr></table></figure>
+<p>登录的状态也通过 <code>let signStatusSignal: Observable&lt;RequestStatus&gt;</code> 提供外部接口，直接观察状态的改变实现成功或失败的提示。（<strong>注：我认为 Controller 做页面的跳转和各种弹窗是必要的工作，所以我将这些放在控制器中做。</strong>）</p>
+<p>最后，当按钮点击后，通过 <code>signCommand</code> 将按钮点击事件传递进来，内部通过订阅取得对应事件并发送网络请求：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">private func _respondsToSignIn() &#123;</span><br><span class="line">    self.signStatusSubject.onNext(.doing)</span><br><span class="line">    YSNetWorking&lt;BaseModel&lt;SignDataModel&gt;&gt;(url: loginByNameApi)</span><br><span class="line">        .method(.post)</span><br><span class="line">        .parameters([&quot;name&quot;: self.username, &quot;password&quot;: self.passowrd, &quot;systemCode&quot;: &quot;ISCC_MOBILE&quot;])</span><br><span class="line">        .resume()</span><br><span class="line">        .subscribe(onNext: &#123; (response) in</span><br><span class="line">            if response.code == 200 &#123;</span><br><span class="line">                self.signStatusSubject.onNext(.success)</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                self.signStatusSubject.onNext(.failed(message: response.msg))</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, onError: &#123; (error) in</span><br><span class="line">            self.signStatusSubject.onNext(.failed(message: &quot;网络似乎发生了错误!&quot;))</span><br><span class="line">        &#125;)</span><br><span class="line">        .disposed(by: self.disposeBag)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里我提一句，得益于 Swift 的范型特点，我们做网络请求时可以取得准确的数据模型。</p>
+<p>由于 Swift 是一门数据严谨的语言，所以在模型设计上就不会想 Objective-C 一样那么灵活了。这里我通过示例简单的展示下我遇到的坑，及解决办法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">typealias ModelType = Codable &amp; DescriptionDebugable</span><br><span class="line"></span><br><span class="line">struct BaseModel&lt;T: ModelType&gt;: ModelType &#123;</span><br><span class="line">    var code: Int</span><br><span class="line">    var msg: String</span><br><span class="line">    var success: Bool</span><br><span class="line">    var data: DataWithStringType&lt;T&gt;!</span><br><span class="line">    var progressTask: ProgressTask?</span><br><span class="line">    var errors: [ErrorModel]?</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>很明显，我所在的项目中 data 字段是所有的有用字段的集合。坑就在这里，当请求正确无误时，data 字段是正确的数据结构，而当请求错误时，服务端将 data 字段设置为一个字符串了，而在 Swift 中，数据类型是唯一确定的，我们不能将 data 字段即设置为一个数据结构又设置为一个字符串。而解决办法就是 – 转化，所以增加了一个 <code>DataWithStringType</code> 的模型，用于判断当前值是否为结构体，如果是，那么就归档到 <code>entity</code> 中，否则就归档到 <code>string</code> 中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">struct DataWithStringType&lt;T: ModelType&gt;: ModelType &#123;</span><br><span class="line">    </span><br><span class="line">    var string: String?</span><br><span class="line">    var entity: T?</span><br><span class="line">    </span><br><span class="line">    init(from decoder: Decoder) throws &#123;</span><br><span class="line">        let singleValueContainer = try decoder.singleValueContainer()</span><br><span class="line">        </span><br><span class="line">        if let stringValue = try? singleValueContainer.decode(String.self)  &#123;</span><br><span class="line">            string = stringValue</span><br><span class="line">        &#125; else if let entityValue = try? singleValueContainer.decode(T.self) &#123;</span><br><span class="line">            entity = entityValue</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当所有的准备工作完成后，来看看 Controller 是如何将 ViewModel 和 View 绑定的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">func bindingViewModel() &#123;</span><br><span class="line">    scrollView.usernameTextField.rx.text.orEmpty</span><br><span class="line">        .bind(to: signVm.inputs.username)</span><br><span class="line">        .disposed(by: signVm.disposeBag)</span><br><span class="line">        </span><br><span class="line">    scrollView.passwordTextField.rx.text.orEmpty</span><br><span class="line">        .bind(to: signVm.inputs.password)</span><br><span class="line">        .disposed(by: signVm.disposeBag)</span><br><span class="line">        </span><br><span class="line">    scrollView.signButton.rx.tap</span><br><span class="line">        .bind(to: signVm.inputs.signCommand)</span><br><span class="line">        .disposed(by: signVm.disposeBag)</span><br><span class="line">        </span><br><span class="line">    signVm.outputs.validSignSignal</span><br><span class="line">        .bind(to: scrollView.signButton.rx.isEnabled)</span><br><span class="line">        .disposed(by: signVm.disposeBag)</span><br><span class="line">        </span><br><span class="line">    signVm.outputs.signStatusSignal</span><br><span class="line">        .subscribe &#123; [unowned self] in</span><br><span class="line">            self.view.endEditing(false)</span><br><span class="line">            switch $0.element! &#123;</span><br><span class="line">            case .doing:</span><br><span class="line">                self.view.makeActivityWithText(&quot;正在登陆&quot;, userInteraction: false)</span><br><span class="line">            case .success:</span><br><span class="line">                self.view.updateActivityWithImage(UIImage(named: &quot;icon-pangu-activitysuccess&quot;), text: &quot;登陆成功&quot;)</span><br><span class="line">            case let .failed(message):</span><br><span class="line">                self.view.updateActivityWithImage(UIImage(named: &quot;icon-pangu-activityerror&quot;), text: message)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        .disposed(by: signVm.disposeBag)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样整体看起来，代码的模块性十分的良好。vm 甚至可以单独拿出来进行测试。当内部的业务逻辑需要更改时，几乎可以只动 vm 中的代码就能实现变更。并且在响应上，由于是绑定关系，那么逻辑链路还是相对明显的。举个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">scrollView.passwordTextField.rx.text.orEmpty</span><br><span class="line">        .bind(to: signVm.inputs.password)</span><br><span class="line">        .disposed(by: signVm.disposeBag)</span><br></pre></td></tr></table></figure>
+<p>将密码的输入绑定到 vm 的 <code>username</code>，而该对象通过 <code>passwordSubject</code>转接到 vm 中执行相应业务逻辑。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>在这篇文章中，通过在真实的项目中使用 Rx 和 MVVM 实现“登录”的需求来学习这二者。我认为重点是对于 vm 的设计和 Controller 如何进行数据绑定的。另外，至于 MVVM 中每个模块应该干什么，还是任重道远啊。</p>
+<p>博文推荐：</p>
+<ul>
+<li><a href="https://blog.csdn.net/zuiyingong6567/article/details/80150834" target="_blank" rel="noopener">深入理解MVC</a></li>
+<li><a href="http://www.cocoachina.com/ios/20170612/19500.html" target="_blank" rel="noopener">iOS 关于MVC和MVVM设计模式的那些事</a></li>
+<li><a href="https://casatwy.com/iosying-yong-jia-gou-tan-viewceng-de-zu-zhi-he-diao-yong-fang-an.html" target="_blank" rel="noopener">iOS应用架构谈 view层的组织和调用方案</a></li>
+<li><a href="https://objccn.io/issue-13-1/" target="_blank" rel="noopener">MVVM 介绍</a></li>
+<li><a href="https://medium.com/blablacar-tech/rxswift-mvvm-66827b8b3f10" target="_blank" rel="noopener">RxSwift + MVVM: how to feed ViewModels</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/28/从 WWDC 2018 220 Session 窥探 Auto Layout/" rel="next" title="从 WWDC 2018 220 Session 窥探 Auto Layout">
+                <i class="fa fa-chevron-left"></i> 从 WWDC 2018 220 Session 窥探 Auto Layout
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Luckeyhill
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/header.jpg" alt="yeeshe">
+            
+              <p class="site-author-name" itemprop="name">yeeshe</p>
+              <p class="site-description motion-element" itemprop="description">积少成多，水滴石穿</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  
+                </div>
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/qiancaox" title="GitHub &rarr; https://github.com/qiancaox" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://www.jianshu.com/u/14a1ad47fbf3" title="简书 &rarr; https://www.jianshu.com/u/14a1ad47fbf3" rel="noopener" target="_blank"><i class="fa fa-fw fa-bookmark"></i>简书</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#MVC"><span class="nav-number">1.</span> <span class="nav-text">MVC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVVM"><span class="nav-number">2.</span> <span class="nav-text">MVVM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RxSwift"><span class="nav-number">3.</span> <span class="nav-text">RxSwift</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVVM邂逅RxSwift"><span class="nav-number">4.</span> <span class="nav-text">MVVM邂逅RxSwift</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">5.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="author" itemprop="copyrightHolder"> yeeshe</span>
+  <span class="author" itemprop="copyrightHolder"> 所有。</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">特别鸣谢：博客框架由<a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a>提供</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题由<a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT</a>提供</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
