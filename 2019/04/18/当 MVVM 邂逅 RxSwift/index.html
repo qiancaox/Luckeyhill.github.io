@@ -100,21 +100,21 @@
 
 
 
-  <meta name="description" content="MVVM 起源于2005年，由微软的架构师 John Gossman 提出的一种架构模式，并在 WPF 和 Silverlight 中使用。它是 MVC 的一种衍生架构，通过“绑定”机制将 Controller 中的业务代码脱离出来，从而促进了 UI 层与逻辑代码的分离。 RxSwift 是 ReactiveX 的 Swift 版本，扩展了观察者模式，是一套基于异步事件的响应式编程框架。 这两个神">
+  <meta name="description" content="MVVM 起源于2005年，由微软的架构师 John Gossman 提出的一种架构模式，并在 WPF 和 Silverlight 中使用。它是 MVC 的一种衍生架构，通过“绑定”机制将 Controller 中的业务代码脱离出来，从而促进了 UI 层与逻辑代码的分离。 RxSwift 是 ReactiveX 的 Swift 版本，扩展了观察者模式，是一套基于异步事件的响应式编程框架。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="当 MVVM 邂逅 RxSwift">
 <meta property="og:url" content="https://qiancaox.github.io/2019/04/18/当 MVVM 邂逅 RxSwift/index.html">
 <meta property="og:site_name" content="yeeshe">
-<meta property="og:description" content="MVVM 起源于2005年，由微软的架构师 John Gossman 提出的一种架构模式，并在 WPF 和 Silverlight 中使用。它是 MVC 的一种衍生架构，通过“绑定”机制将 Controller 中的业务代码脱离出来，从而促进了 UI 层与逻辑代码的分离。 RxSwift 是 ReactiveX 的 Swift 版本，扩展了观察者模式，是一套基于异步事件的响应式编程框架。 这两个神">
+<meta property="og:description" content="MVVM 起源于2005年，由微软的架构师 John Gossman 提出的一种架构模式，并在 WPF 和 Silverlight 中使用。它是 MVC 的一种衍生架构，通过“绑定”机制将 Controller 中的业务代码脱离出来，从而促进了 UI 层与逻辑代码的分离。 RxSwift 是 ReactiveX 的 Swift 版本，扩展了观察者模式，是一套基于异步事件的响应式编程框架。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2058564545,654273587&fm=26&gp=0.jpg">
 <meta property="og:image" content="http://cc.cocimg.com/api/uploads/20150525/1432542173109354.png">
 <meta property="og:image" content="https://objccn.io/images/issues//issue-13/mvvm.png">
 <meta property="og:image" content="http://cc.cocimg.com/api/uploads/20150525/1432542301497557.gif">
-<meta property="og:updated_time" content="2019-04-18T13:04:54.511Z">
+<meta property="og:updated_time" content="2019-04-18T13:11:22.515Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="当 MVVM 邂逅 RxSwift">
-<meta name="twitter:description" content="MVVM 起源于2005年，由微软的架构师 John Gossman 提出的一种架构模式，并在 WPF 和 Silverlight 中使用。它是 MVC 的一种衍生架构，通过“绑定”机制将 Controller 中的业务代码脱离出来，从而促进了 UI 层与逻辑代码的分离。 RxSwift 是 ReactiveX 的 Swift 版本，扩展了观察者模式，是一套基于异步事件的响应式编程框架。 这两个神">
+<meta name="twitter:description" content="MVVM 起源于2005年，由微软的架构师 John Gossman 提出的一种架构模式，并在 WPF 和 Silverlight 中使用。它是 MVC 的一种衍生架构，通过“绑定”机制将 Controller 中的业务代码脱离出来，从而促进了 UI 层与逻辑代码的分离。 RxSwift 是 ReactiveX 的 Swift 版本，扩展了观察者模式，是一套基于异步事件的响应式编程框架。">
 <meta name="twitter:image" content="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2058564545,654273587&fm=26&gp=0.jpg">
 
 
@@ -416,8 +416,8 @@
       
         <p><a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel" target="_blank" rel="noopener">MVVM</a> 起源于2005年，由微软的架构师 John Gossman 提出的一种架构模式，并在 <a href="https://en.wikipedia.org/wiki/Windows_Presentation_Foundation" target="_blank" rel="noopener">WPF</a> 和 <a href="https://en.wikipedia.org/wiki/Microsoft_Silverlight" target="_blank" rel="noopener">Silverlight</a> 中使用。它是 <a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller" target="_blank" rel="noopener">MVC</a> 的一种衍生架构，通过“绑定”机制将 Controller 中的业务代码脱离出来，从而促进了 UI 层与逻辑代码的分离。</p>
 <p><a href="https://beeth0ven.github.io/RxSwift-Chinese-Documentation/" target="_blank" rel="noopener">RxSwift</a> 是 <a href="http://reactivex.io/" target="_blank" rel="noopener">ReactiveX</a> 的 Swift 版本，扩展了<a href="https://zh.wikipedia.org/wiki/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F" target="_blank" rel="noopener">观察者模式</a>，是一套基于异步事件的响应式编程框架。</p>
-<p>这两个神奇的技术碰撞到一起会有什么样的火花呢？下面，我将从以下几方面来简述我在使用它们时的一些感悟（纯属个人理解）：<a href="#MVC">MVC</a>、<a href="#MVVM">MVVM</a>、<a href="#RxSwift">RxSwift</a>、<a href="#MVVM邂逅RxSwift">MVVM邂逅RxSwift</a></p>
 <a id="more"></a>
+<p>这两个神奇的技术碰撞到一起会有什么样的火花呢？下面，我将从以下几方面来简述我在使用它们时的一些感悟（纯属个人理解）：<a href="#MVC">MVC</a>、<a href="#MVVM">MVVM</a>、<a href="#RxSwift">RxSwift</a>、<a href="#MVVM邂逅RxSwift">MVVM邂逅RxSwift</a></p>
 <h2 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h2><p>MVC 可以说是一套最经典的客户端开发架构，同时苹果官方也是极力推崇的架构模式。它将项目分为：Model、View、Controller 三个层级，它们的关系如下图所示：</p>
 <p><img src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2058564545,654273587&amp;fm=26&amp;gp=0.jpg" alt="图解MVC"></p>
 <p>上图清晰的展示的它们三者的关系，Model 代表数据，View 带边视图，Controller 则负责帮助它们建立关系：</p>
@@ -564,6 +564,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2019/04/18/对 CoreAnimation 进行封装，实现链式调用/" rel="prev" title="对 CoreAnimation 进行封装，实现链式调用">
+                对 CoreAnimation 进行封装，实现链式调用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -634,7 +638,7 @@
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-count">3</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

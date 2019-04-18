@@ -100,23 +100,26 @@
 
 
 
-  <meta name="description" content="积少成多，水滴石穿">
-<meta property="og:type" content="website">
-<meta property="og:title" content="yeeshe">
-<meta property="og:url" content="https://qiancaox.github.io/index.html">
+  <meta name="description" content="动画在 iOS 开发中可谓是见惯不怪了，实现动画的方式多种多样。你可以使用 facebook 的 pop，基于 CADisplayLink 自行实现，也可以基于系统提供的 api 进行开发。 这篇文章是基于系统的 CoreAnimation 库进行二次封装，实现动画的链式调用。由于最近比较痴迷于 Swift ,所以代码使用该语言实现，但是思路是相同的，喜欢的可以自己实现一套 Objective-C">
+<meta property="og:type" content="article">
+<meta property="og:title" content="对 CoreAnimation 进行封装，实现链式调用">
+<meta property="og:url" content="https://qiancaox.github.io/2019/04/18/对 CoreAnimation 进行封装，实现链式调用/index.html">
 <meta property="og:site_name" content="yeeshe">
-<meta property="og:description" content="积少成多，水滴石穿">
+<meta property="og:description" content="动画在 iOS 开发中可谓是见惯不怪了，实现动画的方式多种多样。你可以使用 facebook 的 pop，基于 CADisplayLink 自行实现，也可以基于系统提供的 api 进行开发。 这篇文章是基于系统的 CoreAnimation 库进行二次封装，实现动画的链式调用。由于最近比较痴迷于 Swift ,所以代码使用该语言实现，但是思路是相同的，喜欢的可以自己实现一套 Objective-C">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1858049-67c456a499fc3780.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-04-18T13:11:03.313Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="yeeshe">
-<meta name="twitter:description" content="积少成多，水滴石穿">
+<meta name="twitter:title" content="对 CoreAnimation 进行封装，实现链式调用">
+<meta name="twitter:description" content="动画在 iOS 开发中可谓是见惯不怪了，实现动画的方式多种多样。你可以使用 facebook 的 pop，基于 CADisplayLink 自行实现，也可以基于系统提供的 api 进行开发。 这篇文章是基于系统的 CoreAnimation 库进行二次封装，实现动画的链式调用。由于最近比较痴迷于 Swift ,所以代码使用该语言实现，但是思路是相同的，喜欢的可以自己实现一套 Objective-C">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1858049-67c456a499fc3780.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
 
 
 
-  <link rel="canonical" href="https://qiancaox.github.io/">
+  <link rel="canonical" href="https://qiancaox.github.io/2019/04/18/对 CoreAnimation 进行封装，实现链式调用/">
 
 
 
@@ -126,7 +129,7 @@
   };
 </script>
 
-  <title>yeeshe</title>
+  <title>对 CoreAnimation 进行封装，实现链式调用 | yeeshe</title>
   
 
 
@@ -174,8 +177,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -213,7 +215,7 @@
         
         
           
-          <li class="menu-item menu-item-ios-开发笔记 menu-item-active">
+          <li class="menu-item menu-item-ios-开发笔记">
 
     
     
@@ -304,9 +306,9 @@
           
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -338,10 +340,8 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/04/18/对 CoreAnimation 进行封装，实现链式调用/" class="post-title-link" itemprop="url">对 CoreAnimation 进行封装，实现链式调用</a>
+          <h1 class="post-title" itemprop="name headline">对 CoreAnimation 进行封装，实现链式调用
+
               
             
           </h1>
@@ -411,19 +411,31 @@
       
 
       
-        
-          <p>动画在 iOS 开发中可谓是见惯不怪了，实现动画的方式多种多样。你可以使用 facebook 的 <a href="https://github.com/facebook/pop" target="_blank" rel="noopener">pop</a>，基于 <code>CADisplayLink</code> 自行实现，也可以基于系统提供的 api 进行开发。</p>
+        <p>动画在 iOS 开发中可谓是见惯不怪了，实现动画的方式多种多样。你可以使用 facebook 的 <a href="https://github.com/facebook/pop" target="_blank" rel="noopener">pop</a>，基于 <code>CADisplayLink</code> 自行实现，也可以基于系统提供的 api 进行开发。</p>
 <p>这篇文章是基于系统的 CoreAnimation 库进行二次封装，实现动画的链式调用。由于最近比较痴迷于 Swift ,所以代码使用该语言实现，但是思路是相同的，喜欢的可以自己实现一套 Objective-C 的链式动画库。</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/04/18/对 CoreAnimation 进行封装，实现链式调用/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
+<a id="more"></a>
+<h2 id="为什么我要做这个库"><a href="#为什么我要做这个库" class="headerlink" title="为什么我要做这个库"></a>为什么我要做这个库</h2><p>正如开篇所说，动画的使用太多了，而 CA 框架的动画实现太过于呆板，而且巨繁琐。如果一个项目只有少数的动画效果需要实现，这样使用问题不大，但是大量动画着实虐心。</p>
+<p>既然无法减少动画的开发，那么有没有什么办法让动画的实现不再那么无聊甚至无趣（至少对简单动画而言）。所以，考虑到这点，我就动手做了一个能够实现简单动画的链式封装。当然，能力有限，目前只是针对 Basic 和 Group 两种动画的链式封装。</p>
+<h2 id="我是如何设计这个库的"><a href="#我是如何设计这个库的" class="headerlink" title="我是如何设计这个库的"></a>我是如何设计这个库的</h2><p><img src="https://upload-images.jianshu.io/upload_images/1858049-67c456a499fc3780.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="YSChainAnimator"></p>
+<p>如图所示，我通过一个中间类来统一管理所有的动画对象，当触发 <code>run</code> 时动画开始执行。通过这样的设计，我将整个库需要完成的功能以及提供的接口方法都一并用接口的方式实现了，具体我们在下一章节中来看看实现上的细节。</p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>初始化方法提供了两个，一种是直接使用 layer 初始化，另外一种是使用 view 初始化：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">private weak var layer: CALayer!</span><br><span class="line"></span><br><span class="line">init(layer: CALayer) &#123;</span><br><span class="line">    self.layer = layer</span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line">convenience init(view: UIView) &#123;</span><br><span class="line">    self.init(layer: view.layer)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而动画执行必须要等到 <code>run</code> 方法触发后才能执行，所以需要一个集合来存放已经初始化了的动画对象：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private var animations: [(key: String, anim: CAAnimation)] = []</span><br></pre></td></tr></table></figure>
+<p>动画对象的存储使用了数组嵌套元组的结构，能够方便我们在寻找对应的动画对象时效率较高，存储意义也明确。而在关联动画的“寻址 <code>key</code>”时，为了方便使用方使用，在使用者不想绞尽脑汁想 key 时，我也提供了默认的 key 使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">private func _animKey(_ key: String? = nil) -&gt; String &#123;</span><br><span class="line">    return key ?? &quot;com.YSChainAnimator.anim.count_\(animations.count)&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当你需要添加一个动画对象时，内部实现一个公用的方法实现添加动画到动画管理容器中，后续直接调用即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@discardableResult</span><br><span class="line">func _add(_ key: String? = nil, anim handler: () -&gt; CAAnimation) -&gt; Self &#123;</span><br><span class="line">    animations.append((key: _animKey(key), anim: handler()))</span><br><span class="line">    return self</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该方法通过闭包的方式，将动画的初始化放由使用者决定，一定程度上提高了库的灵活性。私有方法介绍后，看看公共接口是如何实现的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">@discardableResult</span><br><span class="line">func anim(_ keyPath: String, key: String? = nil) -&gt; Self &#123;</span><br><span class="line">    return _add(key) &#123;</span><br><span class="line">        let anim = CABasicAnimation(keyPath: keyPath)</span><br><span class="line">        anim.duration = 1.0</span><br><span class="line">        return anim</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@discardableResult</span><br><span class="line">func group() -&gt; Self &#123;</span><br><span class="line">    if animations.count == 0 &#123;</span><br><span class="line">        print(&quot;Group animation ocurred error, because there are any animation in animator.&quot;)</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        let _animations = animations</span><br><span class="line">        animations.removeAll()</span><br><span class="line">        _add(&quot;com.YSChainAnimator.anim.group.count_\(animations.count)&quot;) &#123; () -&gt; CAAnimation in</span><br><span class="line">            let group = CAAnimationGroup()</span><br><span class="line">            group.animations = _animations.compactMap &#123; $0.anim &#125;</span><br><span class="line">            return group</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">        </span><br><span class="line">    return self</span><br><span class="line">&#125;</span><br><span class="line">        </span><br><span class="line">func run() &#123;</span><br><span class="line">    for animate in animations &#123;</span><br><span class="line">        layer.add(animate.anim, forKey: animate.key)</span><br><span class="line">    &#125;</span><br><span class="line">    animations.removeAll()</span><br><span class="line">&#125;</span><br><span class="line">        </span><br><span class="line">@discardableResult</span><br><span class="line">func modify&lt;T: CAAnimation&gt;(anim handler:(T?) -&gt; Void) -&gt; Self  &#123;</span><br><span class="line">    handler(animations.last?.anim as? T)</span><br><span class="line">    return self</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>简单的动画默认动画时间为1s；<code>group</code> 是将之前所有加的动画全部都使用组动画进行包装。为了方便对更精确的属性进行修改，提供一个 <code>modify</code> 方法，另外如果还有更详细的动画属性需要设置，使用方也可以自己调用方法进行设置。精确的方法实现如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">@discardableResult</span><br><span class="line">func duration(_ d: CFTimeInterval = 1.0) -&gt; Self &#123;</span><br><span class="line">    return modify &#123; $0?.duration = d &#125;</span><br><span class="line">&#125;</span><br><span class="line">        </span><br><span class="line">@discardableResult</span><br><span class="line">func from(_ v: Any?) -&gt; Self &#123;</span><br><span class="line">    return modify &#123;</span><br><span class="line">        if $0?.isKind(of: CAAnimationGroup.self) ?? false &#123;</span><br><span class="line">            print(&quot;Modify last animation `fromValue` ocurred error, because it&apos;s an group animation.&quot;)</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            ($0 as! CABasicAnimation).fromValue = v</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line">@discardableResult</span><br><span class="line">func to(_ v: Any?) -&gt; Self &#123;</span><br><span class="line">    return modify &#123;</span><br><span class="line">        if $0?.isKind(of: CAAnimationGroup.self) ?? false &#123;</span><br><span class="line">            print(&quot;Modify last animation `toValue` ocurred error, because it&apos;s an group animation.&quot;)</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            ($0 as! CABasicAnimation).toValue = v</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">        </span><br><span class="line">@discardableResult</span><br><span class="line">func by(_ v: Any?) -&gt; Self &#123;</span><br><span class="line">    return modify &#123;</span><br><span class="line">        if $0?.isKind(of: CAAnimationGroup.self) ?? false &#123;</span><br><span class="line">            print(&quot;Modify last animation `byValue` ocurred error, because it&apos;s an group animation.&quot;)</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            ($0 as! CABasicAnimation).byValue = v</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">        </span><br><span class="line">@discardableResult</span><br><span class="line">func timing(_ v: CAMediaTimingFunction) -&gt; Self &#123;</span><br><span class="line">    return modify &#123; $0?.timingFunction = v &#125;</span><br><span class="line">&#125;</span><br><span class="line">        </span><br><span class="line">@discardableResult</span><br><span class="line">func hold() -&gt; Self &#123;</span><br><span class="line">    return modify &#123;</span><br><span class="line">#if swift(&gt;=4.2)</span><br><span class="line">        $0?.fillMode = CAMediaTimingFillMode.forwards</span><br><span class="line">#else</span><br><span class="line">        $0?.fillMode = kCAFillModeForwards</span><br><span class="line">#endif</span><br><span class="line">        $0?.isRemovedOnCompletion = false</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>方法实现相对比较简单，都是通过调用 <code>modify</code> 方法实现的，当然如果这些便捷方法不满足需求，使用方还可以自己调用该方法实现。<code>hold</code> 方法是常规的对动画完成后的停留属性的包装。这里就是 modal 和 presentation 的区别了，设计到比较底层的 CoreAnimation 的知识，这里做一个引子，后续如果有时间，再来仔细研究该框架。</p>
+<p>为了更贴切的监听动画的状态，还需要增加对动画开始和结束的回调：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">extension YSChainAnimator &#123;</span><br><span class="line">    </span><br><span class="line">    private class AnimationDelegate: NSObject, CAAnimationDelegate &#123;</span><br><span class="line">        </span><br><span class="line">        private let begin: AnimatingClosure?</span><br><span class="line">        private let end: AnimatingClosure?</span><br><span class="line">        </span><br><span class="line">        init(begin: AnimatingClosure?, end: AnimatingClosure?) &#123;</span><br><span class="line">            self.begin = begin</span><br><span class="line">            self.end = end</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        func animationDidStart(_ anim: CAAnimation) &#123;</span><br><span class="line">            begin?(anim)</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        func animationDidStop(_ anim: CAAnimation, finished flag: Bool) &#123;</span><br><span class="line">            end?(anim)</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    @discardableResult</span><br><span class="line">    func animating(begin: AnimatingClosure?, end: AnimatingClosure?) -&gt; Self &#123;</span><br><span class="line">        animations.last?.anim.delegate = AnimationDelegate(begin: begin, end: end)</span><br><span class="line">        return self</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个地方，使用一个私有类来实现对 CoreAnimation 的动画代理方法的实现，进而可以统一管理回调。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这篇文章是对开发中繁琐功能的简化封装，在封装过程中设计到了“工厂设计模式”的体现。通过使用 Swift 来实现，一方面学习了新的语言。另外，感到这门语言着实让人吃惊，简洁但又明确，相信在不久的将来（等它比较稳定的将来）应该能够替换 Objective-C 。使用先设计，再开发的步骤有效的提高了编码的质量，以后应该多使用这样的方式开发。</p>
+
       
     </div>
 
@@ -446,168 +458,28 @@
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://qiancaox.github.io/2019/04/18/当 MVVM 邂逅 RxSwift/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="yeeshe">
-      <meta itemprop="description" content="积少成多，水滴石穿">
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="yeeshe">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/04/18/当 MVVM 邂逅 RxSwift/" class="post-title-link" itemprop="url">当 MVVM 邂逅 RxSwift</a>
-              
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
+              <a href="/2019/04/18/当 MVVM 邂逅 RxSwift/" rel="next" title="当 MVVM 邂逅 RxSwift">
+                <i class="fa fa-chevron-left"></i> 当 MVVM 邂逅 RxSwift
+              </a>
             
+          </div>
 
-	      
+          <span class="post-nav-divider"></span>
 
-              
-                <span class="post-meta-item-text">发布于2019-04-18</span>
-              
-
+          <div class="post-nav-prev post-nav-item">
             
-          </span>
-
-          
-            <span class="post-category">
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-	      
-
-              
-                <span class="post-meta-item-text">分类于</span>
-
-              
-
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/iOS-开发笔记/" itemprop="url" rel="index"><span itemprop="name">iOS 开发笔记</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <p><a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel" target="_blank" rel="noopener">MVVM</a> 起源于2005年，由微软的架构师 John Gossman 提出的一种架构模式，并在 <a href="https://en.wikipedia.org/wiki/Windows_Presentation_Foundation" target="_blank" rel="noopener">WPF</a> 和 <a href="https://en.wikipedia.org/wiki/Microsoft_Silverlight" target="_blank" rel="noopener">Silverlight</a> 中使用。它是 <a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller" target="_blank" rel="noopener">MVC</a> 的一种衍生架构，通过“绑定”机制将 Controller 中的业务代码脱离出来，从而促进了 UI 层与逻辑代码的分离。</p>
-<p><a href="https://beeth0ven.github.io/RxSwift-Chinese-Documentation/" target="_blank" rel="noopener">RxSwift</a> 是 <a href="http://reactivex.io/" target="_blank" rel="noopener">ReactiveX</a> 的 Swift 版本，扩展了<a href="https://zh.wikipedia.org/wiki/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F" target="_blank" rel="noopener">观察者模式</a>，是一套基于异步事件的响应式编程框架。</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/04/18/当 MVVM 邂逅 RxSwift/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -617,169 +489,15 @@
   </article>
 
 
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://qiancaox.github.io/2019/03/28/从 WWDC 2018 220 Session 窥探 Auto Layout/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="yeeshe">
-      <meta itemprop="description" content="积少成多，水滴石穿">
-      <meta itemprop="image" content="/images/header.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="yeeshe">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/03/28/从 WWDC 2018 220 Session 窥探 Auto Layout/" class="post-title-link" itemprop="url">从 WWDC 2018 220 Session 窥探 Auto Layout</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-
-	      
-
-              
-                <span class="post-meta-item-text">发布于2019-03-28</span>
-              
-
-            
-          </span>
-
-          
-            <span class="post-category">
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-	      
-
-              
-                <span class="post-meta-item-text">分类于</span>
-
-              
-
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/iOS-开发笔记/" itemprop="url" rel="index"><span itemprop="name">iOS 开发笔记</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>苹果公司早在 iOS 6 系统中就引入了 Auto Layout ，到目前为止，开发人员进行界面布局大致可以分为两类： Frame 、 Auto Layout 。使用 Frame 进行布局的开发者认为，这种方式更精确，并且性能优良，然而该方式过于原始，一方面在界面维护性差（杠精可能不这么觉得），另一方面在多屏幕适配上让人头疼。使用 Auto Layout 的开发者则认为，该方式在屏幕适配上占尽优势，在加入 了Interface Builder 后更是将“所见即所得”体现得淋漓尽致，但是最终形成视图显示时任然还是落实到 origin 和 size 上，从而中间会多出大量的根据约束、优先级等计算位置和大小的操作，一定程度上降低了性能，而且使用不当还极易造成崩溃。</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2019/03/28/从 WWDC 2018 220 Session 窥探 Auto Layout/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -800,8 +518,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Luckeyhill
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -886,6 +613,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么我要做这个库"><span class="nav-number">1.</span> <span class="nav-text">为什么我要做这个库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#我是如何设计这个库的"><span class="nav-number">2.</span> <span class="nav-text">我是如何设计这个库的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码实现"><span class="nav-number">3.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
@@ -1013,6 +757,10 @@
 
 
   
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
 
   
 
@@ -1023,6 +771,8 @@
 
   
 
+
+  
 
 
   
