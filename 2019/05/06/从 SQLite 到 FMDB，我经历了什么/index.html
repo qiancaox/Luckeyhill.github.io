@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/header.jpg?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/header.jpg?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/header.jpg?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/header.jpg?v=6.7.0" color="#222">
+
+
+  <link rel="manifest" href="/images/header.jpg">
+
+
+  <meta name="msapplication-config" content="/images/header.jpg">
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="移动端的纯在线 App 已经跟不上时代的节奏了，或多或少都会有一些数据需要本地存储。目前在 iOS 上有以下几种方式可供选择：  NSUserDefault，也称偏好设置。用于数据规模小，于业务无关的数据存储； keychain，苹果提供的带有可逆加密的存储机制，只要系统不重装，数据都能得到保留，并且支持 iClound 云同步，普遍用于各种存密码的存储和用户唯一标识串等； 文件存储： Plist">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从 SQLite 到 FMDB，我经历了什么">
+<meta property="og:url" content="https://qiancaox.github.io/2019/05/06/从 SQLite 到 FMDB，我经历了什么/index.html">
+<meta property="og:site_name" content="yeeshe">
+<meta property="og:description" content="移动端的纯在线 App 已经跟不上时代的节奏了，或多或少都会有一些数据需要本地存储。目前在 iOS 上有以下几种方式可供选择：  NSUserDefault，也称偏好设置。用于数据规模小，于业务无关的数据存储； keychain，苹果提供的带有可逆加密的存储机制，只要系统不重装，数据都能得到保留，并且支持 iClound 云同步，普遍用于各种存密码的存储和用户唯一标识串等； 文件存储： Plist">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1858049-a27081fd838718b7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-05-06T01:01:07.337Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从 SQLite 到 FMDB，我经历了什么">
+<meta name="twitter:description" content="移动端的纯在线 App 已经跟不上时代的节奏了，或多或少都会有一些数据需要本地存储。目前在 iOS 上有以下几种方式可供选择：  NSUserDefault，也称偏好设置。用于数据规模小，于业务无关的数据存储； keychain，苹果提供的带有可逆加密的存储机制，只要系统不重装，数据都能得到保留，并且支持 iClound 云同步，普遍用于各种存密码的存储和用户唯一标识串等； 文件存储： Plist">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1858049-a27081fd838718b7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+
+
+
+  <link rel="canonical" href="https://qiancaox.github.io/2019/05/06/从 SQLite 到 FMDB，我经历了什么/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>从 SQLite 到 FMDB，我经历了什么 | yeeshe</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yeeshe</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-ios-开发笔记">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br>iOS 开发笔记</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-关于">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qiancaox.github.io/2019/05/06/从 SQLite 到 FMDB，我经历了什么/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yeeshe">
+      <meta itemprop="description" content="积少成多，水滴石穿">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yeeshe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">从 SQLite 到 FMDB，我经历了什么
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+
+	      
+
+              
+                <span class="post-meta-item-text">发布于2019-05-06</span>
+              
+
+            
+          </span>
+
+          
+            <span class="post-category">
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+	      
+
+              
+                <span class="post-meta-item-text">分类于</span>
+
+              
+
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/iOS-开发笔记/" itemprop="url" rel="index"><span itemprop="name">iOS 开发笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>移动端的纯在线 App 已经跟不上时代的节奏了，或多或少都会有一些数据需要本地存储。目前在 iOS 上有以下几种方式可供选择：</p>
+<ol>
+<li><code>NSUserDefault</code>，也称偏好设置。用于数据规模小，于业务无关的数据存储；</li>
+<li><code>keychain</code>，苹果提供的带有可逆加密的存储机制，只要系统不重装，数据都能得到保留，并且支持 iClound 云同步，普遍用于各种存密码的存储和用户唯一标识串等；</li>
+<li>文件存储：<ul>
+<li>Plist 文件，也称属性列表。结构化较好或需要方便查询的数据可以选择；</li>
+<li>Archive ，也叫归档/解档。如果需要直接对象化数据时使用，但是由于归档或解档时需要对对象序列化，耗时较多；</li>
+<li>一般文件存储，由于文件在在读写时耗时，所以通常用在量比较小的数据上。</li>
+</ul>
+</li>
+<li>CoreData，苹果官推的数据存储框架，笔者没使用过，这里有个文章可以看看：<a href="http://blog.devtang.com/2016/08/04/i-do-not-like-core-data/" target="_blank" rel="noopener">我为什么不喜欢 Core Data</a>；</li>
+<li>数据库存储。</li>
+</ol>
+<p>说到数据库存储，目前流行的有： <a href="https://www.sqlite.org/index.html" target="_blank" rel="noopener">SQLite</a>、<a href="https://realm.io/" target="_blank" rel="noopener">Realm</a> 等方式在移动端使用。并且它们都有轻量级、跨平台的特点，而今天的主角是 SQLite 数据库。下面将从两方面来探讨下：<a href="#SQLite">SQLite</a>、<a href="#FMDB">FMDB</a></p>
+<a id="more"></a>
+<h2 id="SQLite"><a href="#SQLite" class="headerlink" title="SQLite"></a>SQLite</h2><p>SQLite 是基于 C 语言实现的 SQL(结构化查询语言) 的轻量级关系型数据库的库。并且它还支持跨平台和读写速度快的特性，可以用于嵌入式和移动端的数据存储。但是，由于它没有单独的服务器进程，所以并不能够像 MySQL、Oracle、PostgreSQL 这些大型数据用于服务端的开发。</p>
+<blockquote>
+<p>SQLite does not have a separate server process.</p>
+</blockquote>
+<p>由于它是 C 语言的库，所以在使用过程中，通常都会进行一定的封装。让我们来看 SQLite 的简单使用。</p>
+<p>首先，要想操作数据库，必须要初始化并打开对应的 <code>sqlite3</code> 对象，而且由于这个方法可能会多次调用，所以封装为公用方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)open</span><br><span class="line">&#123;</span><br><span class="line">    NSString *dbPath = [self _databaseSandboxPathWithDBName:nil];</span><br><span class="line">    NSFileManager *fileManager = [NSFileManager defaultManager];</span><br><span class="line">    </span><br><span class="line">    if ([fileManager fileExistsAtPath:dbPath] == NO)</span><br><span class="line">    &#123;</span><br><span class="line">        BOOL rt = [fileManager createFileAtPath:dbPath contents:nil attributes:nil];</span><br><span class="line">        if (!rt) &#123;</span><br><span class="line">            return NO;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    int rt = sqlite3_open([dbPath fileSystemRepresentation], &amp;_database);</span><br><span class="line">    return rt == SQLITE_OK;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 sqlite 库中，open 方法有3个，分别为：<code>sqlite3_open</code>、<code>sqlite3_open16</code>、<code>sqlite3_open_v2</code> ，其中前两个默认以可读可写的方式打开数据库，如果数据库不存在则创建一个。而第三个则提供给用户接口控制打开数据库的方式，该方式通过 flags 来控制。</p>
+<p>与之对应的就是关闭数据库：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">- (void)close</span><br><span class="line">&#123;</span><br><span class="line">    if (_database) &#123;</span><br><span class="line">        sqlite3_close(_database);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当数据库打开后，就可以建表了。而建表就需要执行 SQL 语句了，作为简单得封装，我们只考虑用户输入表明和字段说明的语句，而完整的语句由库拼接：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)createTableWithName:(NSString *)name fileds:(NSString *)fileds</span><br><span class="line">&#123;</span><br><span class="line">    NSString *sql = [NSString stringWithFormat:@&quot;create table if not exists %@ (%@)&quot;, name, fileds];</span><br><span class="line">    if (![self open]) &#123;</span><br><span class="line">        return NO;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    char *msg = NULL;</span><br><span class="line">    int rt = sqlite3_exec(_database, [sql UTF8String], nil, nil, &amp;msg);</span><br><span class="line">    </span><br><span class="line">    return rt == SQLITE_OK;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>函数 <code>sqlite3_exec</code> 接受5个参数，比较重要的是执行语句 <code>[sql UTF8String]</code> 、回调（第三个）和回调函数中的首个传递值（该函数中的第四个）。回调函数将会在执行查询时每查询到一条记录执行一次。</p>
+<p>通常，使用数据库的核心和基础就是增、删、改、查。同样，也需要进行简单的封装才能使用。</p>
+<p>当需要向表中插入一条记录时，封装以下方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)insertValues:(NSDictionary *)map inTable:(NSString *)table</span><br><span class="line">&#123;</span><br><span class="line">    if (![self open]) &#123;</span><br><span class="line">        return NO;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    __block NSMutableArray *values = [NSMutableArray arrayWithCapacity:map.count];</span><br><span class="line">    __block NSMutableArray *keys = [NSMutableArray arrayWithCapacity:map.count];</span><br><span class="line">    [map enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) &#123;</span><br><span class="line">        [keys addObject:key];</span><br><span class="line">        [values addObject:obj];</span><br><span class="line">    &#125;];</span><br><span class="line">    </span><br><span class="line">    NSString *keysString = [keys componentsJoinedByString:@&quot;, &quot;];</span><br><span class="line">    for (int i = 0; i &lt; values.count; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        id value = values[i];</span><br><span class="line">        if ([value isKindOfClass:NSString.class]) &#123;</span><br><span class="line">            [values replaceObjectAtIndex:i withObject:[NSString stringWithFormat:@&quot;&apos;%@&apos;&quot;, value]];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    NSString *valuesString = [values componentsJoinedByString:@&quot;, &quot;];</span><br><span class="line">    </span><br><span class="line">    NSString *sql = [NSString stringWithFormat:@&quot;insert into %@ (%@) values (%@)&quot;, table, keysString, valuesString];</span><br><span class="line">    char *msg = NULL;</span><br><span class="line">    int rt = sqlite3_exec(_database, [sql UTF8String], NULL, NULL, &amp;msg);</span><br><span class="line">    </span><br><span class="line">    [self close];</span><br><span class="line">    </span><br><span class="line">    return rt == SQLITE_OK;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>外部只需要讲表格内容按照字段的方式传入，库会帮助拼接 SQL 语句。这里比较片面的是我只兼容了两种数据类型：text、integer，并且在拼接字符串时，只会给 text 加入单引号区分。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)deleteColumnWithFactor:(NSString *)factor inTable:(NSString *)table</span><br><span class="line">&#123;</span><br><span class="line">    if (![self open]) &#123;</span><br><span class="line">        return NO;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    NSString *sql = [NSString stringWithFormat:@&quot;delete from %@ where (%@)&quot;, table, factor];</span><br><span class="line">    char *msg = NULL;</span><br><span class="line">    int rt = sqlite3_exec(_database, [sql UTF8String], NULL, NULL, &amp;msg);</span><br><span class="line">    </span><br><span class="line">    [self close];</span><br><span class="line">    </span><br><span class="line">    return rt == SQLITE_OK;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当需要删除表格中的行时，需要按照条件 <code>factor</code> 进行 <code>where</code> 的过滤。但是由于查询时，数据的数据类型需要进行判断，所以代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line">- (NSArray *)queryColumnsWithFactor:(NSString *)factor inTable:(NSString *)table</span><br><span class="line">&#123;</span><br><span class="line">    if (![self open]) &#123;</span><br><span class="line">        return nil;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    NSString *sql = [NSString stringWithFormat:@&quot;select * from %@ &quot;, table];</span><br><span class="line">    if (factor) &#123;</span><br><span class="line">        sql = [sql stringByAppendingString:[NSString stringWithFormat:@&quot;where (%@)&quot;, factor]];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    sqlite3_stmt *stmt = NULL;</span><br><span class="line">    int valid = sqlite3_prepare_v2(_database, [sql UTF8String], -1, &amp;stmt, NULL);</span><br><span class="line">    </span><br><span class="line">    if (valid == SQLITE_OK)</span><br><span class="line">    &#123;</span><br><span class="line">        NSMutableArray *array = [NSMutableArray arrayWithCapacity:0];</span><br><span class="line">        </span><br><span class="line">        // 只有当返回值位 SQLITE_ROW 时表示有值查询出来，需要进一步解析</span><br><span class="line">        while (sqlite3_step(stmt) == SQLITE_ROW)</span><br><span class="line">        &#123;</span><br><span class="line">            int count = sqlite3_column_count(stmt);</span><br><span class="line">            if (count &gt; 0)</span><br><span class="line">            &#123;</span><br><span class="line">                NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:count];</span><br><span class="line">                for (int i = 0; i &lt; count; ++i)</span><br><span class="line">                &#123;</span><br><span class="line">                    // 获取列的名字</span><br><span class="line">                    NSString *columnName = [NSString stringWithUTF8String:sqlite3_column_name(stmt, i)];</span><br><span class="line">                    </span><br><span class="line">                    // 获取列的数据类型，在sqlite3.h文件中的第4369行定义为：</span><br><span class="line">                    /*</span><br><span class="line">                    #define SQLITE_INTEGER  1</span><br><span class="line">                    #define SQLITE_FLOAT    2</span><br><span class="line">                    #define SQLITE_BLOB     4</span><br><span class="line">                    #define SQLITE_NULL     5</span><br><span class="line">                    #ifdef SQLITE_TEXT</span><br><span class="line">                    # undef SQLITE_TEXT</span><br><span class="line">                    #else</span><br><span class="line">                    # define SQLITE_TEXT     3</span><br><span class="line">                    #endif</span><br><span class="line">                    #define SQLITE3_TEXT     3</span><br><span class="line">                    */</span><br><span class="line">                    int columnType = sqlite3_column_type(stmt, i);</span><br><span class="line">                    </span><br><span class="line">                    // 声明一个值容器</span><br><span class="line">                    id value = nil;</span><br><span class="line">                    </span><br><span class="line">                    if (columnType == SQLITE_INTEGER) &#123;</span><br><span class="line">                        value = [NSNumber numberWithLongLong:sqlite3_column_int64(stmt, i)];</span><br><span class="line">                    &#125;</span><br><span class="line">                    else if (columnType == SQLITE_FLOAT)</span><br><span class="line">                    &#123;</span><br><span class="line">                        value = [NSNumber numberWithDouble:sqlite3_column_double(stmt, i)];</span><br><span class="line">                    &#125;</span><br><span class="line">                    else if (columnType == SQLITE_BLOB)</span><br><span class="line">                    &#123;</span><br><span class="line">                        const char *dataBuffer = sqlite3_column_blob(stmt, i);</span><br><span class="line">                        int dataSize = sqlite3_column_bytes(stmt, i);</span><br><span class="line">                        if (dataBuffer != NULL) &#123;</span><br><span class="line">                            value = [NSData dataWithBytes:(const void *)dataBuffer length:(NSUInteger)dataSize];</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    else</span><br><span class="line">                    &#123;</span><br><span class="line">                        const char* c = (const char*)sqlite3_column_text(stmt, i);</span><br><span class="line">                        if (c != NULL) &#123;</span><br><span class="line">                            value = [NSString stringWithUTF8String:c];</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    </span><br><span class="line">                    if (value) &#123;</span><br><span class="line">                        [dic setValue:value forKey:columnName];</span><br><span class="line">                    &#125;</span><br><span class="line">                    else</span><br><span class="line">                    &#123;</span><br><span class="line">                        [dic setValue:[NSNull null] forKey:columnName];</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                [array addObject:[dic copy]];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        if (array.count &gt; 0) &#123;</span><br><span class="line">            return [array copy];</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        return nil;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    return nil;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当在取得表中，具体的对象时，由于 sqlite3 中没有提供相应的函数直接获取整体，所以需要每个字段的获取。而在获取时，需要根据具体的数据类型判断来初始化对象。在 sqlite3.h 中将数据类型归结为：INTEGER、FLOAT、BLOB、TEXT 四种，所以分别判断数据类型，并使用相应的获取方法从 stmt 中获取值。</p>
+<p>当数据需要修改时，需要用到 SQL 的 <code>update</code> 语句：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)updateWithFactor:(NSString *)factor inTable:(NSString *)table</span><br><span class="line">&#123;</span><br><span class="line">    if (![self open]) &#123;</span><br><span class="line">        return NO;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    NSString *sql = [NSString stringWithFormat:@&quot;update %@ set %@&quot;, table, factor];</span><br><span class="line">    char *msg = NULL;</span><br><span class="line">    int rt = sqlite3_exec(_database, [sql UTF8String], NULL, NULL, &amp;msg);</span><br><span class="line">    </span><br><span class="line">    return rt == SQLITE_OK;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过这样的封装，我们尽可能的让使用库的人员少写数据库语句。但是这样做，实际上降低了库的灵活性，应对简单的场景都比较捉襟见肘，复杂就更别说了。</p>
+<h2 id="SQLite的缺点"><a href="#SQLite的缺点" class="headerlink" title="SQLite的缺点"></a>SQLite的缺点</h2><p>上一节的例子中，我们看到了想要直接使用 sqlite 数据库，几乎都是 c 语言，一定程度上增加了开发难度。并且我所制作的简单库适用性还很片面，或许只能在我所在的项目中使用。另外真实的数据库操作还包括：事务、多线程安全等。</p>
+<p>如果要实现事务的话，那么在执行 BEGIN、COMMIT、ROLLBACK 操作需要用到以下语句：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sqlite3_exec(_database, &quot;BEGIN&quot;, NULL, NULL, &amp;msg)</span><br><span class="line">sqlite3_exec(_database, &quot;COMMIT&quot;, NULL, NULL, &amp;msg)</span><br><span class="line">sqlite3_exec(_database, &quot;ROLLBACK&quot;, NULL, NULL, &amp;msg)</span><br></pre></td></tr></table></figure>
+<p>对于多线程安全，在提交操作 UPDATE、INSERT、SELECT 等操作时，需要自定义一个串行队列，按照入栈顺序依次执行。方案如下：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/1858049-a27081fd838718b7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="多线程安全"></p>
+<p>方案是现成的，只是实现问题而已。</p>
+<p>上面分析的无疑会给开发增加难度。所以需要有这么一个轮子来帮我们做这些工作，而 FMDB 正是这样的一个库。</p>
+<h2 id="FMDB"><a href="#FMDB" class="headerlink" title="FMDB"></a>FMDB</h2><p><a href="https://github.com/ccgus/fmdb" target="_blank" rel="noopener">FMDB</a> 是一套基于 SQLite 的数据库框架，它将原有的 c 语言库进行了面向对象的封装，并且通过串行队列保证了线程的安全。但是由于它使用 Objective-C 封装的，所以丧失了 SQLite 原本的跨平台特点，而只能在 iOS 中使用。</p>
+<p>在 FMDB 中提供了4个类：</p>
+<ol>
+<li><code>FMDatabase</code>，表示一个单独的 SQLite 数据库实例。通过封装，可以使用面向对象的技术对数据库进行增删改查等操作；</li>
+<li><code>FMDatabaseQueue</code>，使用串行队列，实现对多线程的支持；</li>
+<li><code>FMDatabasePool</code>，使用任务池的方式，实现对多线程的支持（官方不推荐：Before using <code>FMDatabasePool</code>, please consider using <code>&lt;FMDatabaseQueue&gt;</code> instead.）；</li>
+<li><code>FMResultSet</code>，数据库查询结果对象。</li>
+</ol>
+<p>和上章节提到的实现数据库线程安全的方案相同，<code>FMDatabaseQueue</code> 也是将所有的操作 block 都放到了一个 Serial 的串行队列中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">_queue = dispatch_queue_create([[NSString stringWithFormat:@&quot;fmdb.%@&quot;, self] UTF8String], NULL);</span><br><span class="line">dispatch_queue_set_specific(_queue, kDispatchQueueSpecificKey, (__bridge void *)self, NULL);</span><br></pre></td></tr></table></figure>
+<p>第一句代码其实就是新建一个串行队列 <code>_queue</code> 由于执行数据库操作。防止多线程操作数据库导致死锁的精髓就在第二句。<code>dispatch_queue_set_specific</code> 函数的作用是将 <code>(__bridge void *)self</code> 和 <code>_queue</code> 关联起来，而为什么要这样关联，请看下面：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line"> * A key used to associate the FMDatabaseQueue object with the dispatch_queue_t it uses.</span><br><span class="line"> * This in turn is used for deadlock detection by seeing if inDatabase: is called on</span><br><span class="line"> * the queue&apos;s dispatch queue, which should not happen and causes a deadlock.</span><br><span class="line"> */</span><br><span class="line">static const void * const kDispatchQueueSpecificKey = &amp;kDispatchQueueSpecificKey;</span><br><span class="line"></span><br><span class="line">- (void)inDatabase:(void (^)(FMDatabase *db))block &#123;</span><br><span class="line">#ifndef NDEBUG</span><br><span class="line">    /* Get the currently executing queue (which should probably be nil, but in theory could be another DB queue</span><br><span class="line">     * and then check it against self to make sure we&apos;re not about to deadlock. */</span><br><span class="line">    FMDatabaseQueue *currentSyncQueue = (__bridge id)dispatch_get_specific(kDispatchQueueSpecificKey);</span><br><span class="line">    assert(currentSyncQueue != self &amp;&amp; &quot;inDatabase: was called reentrantly on the same queue, which would lead to a deadlock&quot;);</span><br><span class="line">#endif</span><br><span class="line">    </span><br><span class="line">    FMDBRetain(self);</span><br><span class="line">    </span><br><span class="line">    dispatch_sync(_queue, ^() &#123;</span><br><span class="line">        </span><br><span class="line">        FMDatabase *db = [self database];</span><br><span class="line">        block(db);</span><br><span class="line">        </span><br><span class="line">        if ([db hasOpenResultSets]) &#123;</span><br><span class="line">            NSLog(@&quot;Warning: there is at least one open result set around after performing [FMDatabaseQueue inDatabase:]&quot;);</span><br><span class="line">            </span><br><span class="line">#if defined(DEBUG) &amp;&amp; DEBUG</span><br><span class="line">            NSSet *openSetCopy = FMDBReturnAutoreleased([[db valueForKey:@&quot;_openResultSets&quot;] copy]);</span><br><span class="line">            for (NSValue *rsInWrappedInATastyValueMeal in openSetCopy) &#123;</span><br><span class="line">                FMResultSet *rs = (FMResultSet *)[rsInWrappedInATastyValueMeal pointerValue];</span><br><span class="line">                NSLog(@&quot;query: &apos;%@&apos;&quot;, [rs query]);</span><br><span class="line">            &#125;</span><br><span class="line">#endif</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    FMDBRelease(self);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>宏定义 <code>NDEBUG</code> 的作用是将断言宏 <code>assert</code> 替换为无意义的代码（<a href="https://dhoerl.wordpress.com/tag/xcode-configurations/" target="_blank" rel="noopener">参考文档</a>）。</p>
+<p>在 <code>inDatabase</code> 中，首先获取了当前的队列所关联的对象，如果当前队列通过 <code>kDispatchQueueSpecificKey</code> 关联了对象，那么获取到的就是该对象，否则返回 nil 。通过下面的例子来说明一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">static const void * const kDispatchQueueSpecificKey = &amp;kDispatchQueueSpecificKey;</span><br><span class="line"></span><br><span class="line">NSObject *queueAssociateObject = [[NSObject alloc] init];</span><br><span class="line"></span><br><span class="line">dispatch_queue_t queue = dispatch_queue_create(&quot;SQLite.demo.queue&quot;, NULL);</span><br><span class="line"></span><br><span class="line">dispatch_queue_set_specific(queue, kDispatchQueueSpecificKey, (__bridge void*)queueAssociateObject, NULL);</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;%@&quot;, queueAssociateObject);</span><br><span class="line"></span><br><span class="line">id object = (__bridge id)dispatch_get_specific(kDispatchQueueSpecificKey);</span><br><span class="line">NSLog(@&quot;%@&quot;, object);</span><br><span class="line"></span><br><span class="line">dispatch_sync(queue, ^&#123;</span><br><span class="line">    id object = (__bridge id)dispatch_get_specific(kDispatchQueueSpecificKey);</span><br><span class="line">    NSLog(@&quot;%@&quot;, object);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>打印结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SQLiteDemo[28346:1421335] &lt;NSObject: 0x102803100&gt;</span><br><span class="line">SQLiteDemo[28346:1421335] (null)</span><br><span class="line">SQLiteDemo[28346:1421335] &lt;NSObject: 0x102803100&gt;</span><br></pre></td></tr></table></figure>
+<p>可以看到，第二次输出的是获取 <code>dispatch_main_queue</code> 通过 <code>kDispatchQueueSpecificKey</code> 关联的对象，打印结果为 null ，因为 <code>queueAssociateObject</code> 是关联在 <code>queue</code> 上的，所以第三次打印就正确了。换句话说，通过 <code>dispatch_queue_set_specific</code> 能建立一个映射关系。</p>
+<p>回到 <code>inDatabase</code> 中，当回去到当前队列所关联的对象后，如果关联对象和 <code>self</code> 相等，那么证明 <code>inDatabase</code> 也是在 <code>_queue</code> 中执行的，这就会造成多线程的死锁问题。所以使用了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">assert(currentSyncQueue != self &amp;&amp; &quot;inDatabase: was called reentrantly on the same queue, which would lead to a deadlock&quot;);</span><br></pre></td></tr></table></figure>
+<p>在开发阶段判断死锁，从而实现了线程安全。下面再举个例子说明下这里的死锁情况：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">dispatch_queue_set_specific(queue, kDispatchQueueSpecificKey, (__bridge void*)queueAssociateObject, NULL);</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;%@&quot;, queueAssociateObject);</span><br><span class="line"></span><br><span class="line">dispatch_sync(queue, ^&#123;</span><br><span class="line">            </span><br><span class="line">    dispatch_sync(queue, ^&#123;</span><br><span class="line">        id object = (__bridge id)dispatch_get_specific(kDispatchQueueSpecificKey);</span><br><span class="line">         NSLog(@&quot;%@&quot;, object);</span><br><span class="line">    &#125;);</span><br><span class="line">            </span><br><span class="line">    id object = (__bridge id)dispatch_get_specific(kDispatchQueueSpecificKey);</span><br><span class="line">     NSLog(@&quot;%@&quot;, object);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>到第二个 <code>dispatch_sync</code> 的时候就死锁了。</p>
+<p>之所以要加上这样的判断是因为对数据库的访问可能是随机的、不同线程间（也可能是不同的网络回调等）的。内置一个 Serial 队列后，<code>FMDatabaseQueue</code> 并通过技巧判断后就变成线程安全了，所有的数据库访问都是同步执行。</p>
+<p>接下来看看它对事务的支持：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">- (void)beginTransaction:(BOOL)useDeferred withBlock:(void (^)(FMDatabase *db, BOOL *rollback))block &#123;</span><br><span class="line">    FMDBRetain(self);</span><br><span class="line">    dispatch_sync(_queue, ^() &#123; </span><br><span class="line">        </span><br><span class="line">        BOOL shouldRollback = NO;</span><br><span class="line">        </span><br><span class="line">        if (useDeferred) &#123;</span><br><span class="line">            [[self database] beginDeferredTransaction];</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            [[self database] beginTransaction];</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        block([self database], &amp;shouldRollback);</span><br><span class="line">        </span><br><span class="line">        if (shouldRollback) &#123;</span><br><span class="line">            [[self database] rollback];</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            [[self database] commit];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    FMDBRelease(self);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到， FMDB 中的事务支持了延迟，当 <code>useDeferred</code> 为 <code>true</code> 时，使用事务不会立即获取锁，此时其他的线程货进程依然可以使用事务操作数据库，而数据库的上锁会直到需要锁的时候由 <code>sqlite3</code> 库本身添加。而如果我们不这样的搞笑操作时，它提供了友好的 API 操作，只需要将该字段传入 <code>false</code> 就能立即获取到排它锁（EXCLUSIVE），从而禁止其他任何情况对数据库的访问。</p>
+<p>不知道为什么 FMDB 没有支持 IMMEDIATE 来实现 SHARED 锁？是因为目前绝大多数 App 都不没有这种应用场景？</p>
+<p>FMDB 建立在 sqlite 3.7 版本之上，利用 <a href="https://sqlite.org/lang_savepoint.html" target="_blank" rel="noopener">SAVEPOINT</a> 来实现更精确的 ROLLBACK ，源码在 <code>FMDatabase.h</code> 中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)startSavePointWithName:(NSString*)name error:(NSError**)outErr &#123;</span><br><span class="line">#if SQLITE_VERSION_NUMBER &gt;= 3007000</span><br><span class="line">    NSParameterAssert(name);</span><br><span class="line">    </span><br><span class="line">    NSString *sql = [NSString stringWithFormat:@&quot;savepoint &apos;%@&apos;;&quot;, FMDBEscapeSavePointName(name)];</span><br><span class="line">    </span><br><span class="line">    return [self executeUpdate:sql error:outErr withArgumentsInArray:nil orDictionary:nil orVAList:nil];</span><br><span class="line">#else</span><br><span class="line">    NSString *errorMessage = NSLocalizedString(@&quot;Save point functions require SQLite 3.7&quot;, nil);</span><br><span class="line">    if (self.logsErrors) NSLog(@&quot;%@&quot;, errorMessage);</span><br><span class="line">    return NO;</span><br><span class="line">#endif</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (BOOL)releaseSavePointWithName:(NSString*)name error:(NSError**)outErr &#123;</span><br><span class="line">#if SQLITE_VERSION_NUMBER &gt;= 3007000</span><br><span class="line">    NSParameterAssert(name);</span><br><span class="line">    </span><br><span class="line">    NSString *sql = [NSString stringWithFormat:@&quot;release savepoint &apos;%@&apos;;&quot;, FMDBEscapeSavePointName(name)];</span><br><span class="line"></span><br><span class="line">    return [self executeUpdate:sql error:outErr withArgumentsInArray:nil orDictionary:nil orVAList:nil];</span><br><span class="line">#else</span><br><span class="line">    NSString *errorMessage = NSLocalizedString(@&quot;Save point functions require SQLite 3.7&quot;, nil);</span><br><span class="line">    if (self.logsErrors) NSLog(@&quot;%@&quot;, errorMessage);</span><br><span class="line">    return NO;</span><br><span class="line">#endif</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (BOOL)rollbackToSavePointWithName:(NSString*)name error:(NSError**)outErr &#123;</span><br><span class="line">#if SQLITE_VERSION_NUMBER &gt;= 3007000</span><br><span class="line">    NSParameterAssert(name);</span><br><span class="line">    </span><br><span class="line">    NSString *sql = [NSString stringWithFormat:@&quot;rollback transaction to savepoint &apos;%@&apos;;&quot;, FMDBEscapeSavePointName(name)];</span><br><span class="line"></span><br><span class="line">    return [self executeUpdate:sql error:outErr withArgumentsInArray:nil orDictionary:nil orVAList:nil];</span><br><span class="line">#else</span><br><span class="line">    NSString *errorMessage = NSLocalizedString(@&quot;Save point functions require SQLite 3.7&quot;, nil);</span><br><span class="line">    if (self.logsErrors) NSLog(@&quot;%@&quot;, errorMessage);</span><br><span class="line">    return NO;</span><br><span class="line">#endif</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过上面的代码对比，发现经过 FMDB 的封装后，数据库的操作更加面向对象化了。而且支持了多线程安全和事务。</p>
+<p>但 FMDB 也并不是完美的，目前我发现由以下几个比较坑的：</p>
+<ol>
+<li>由于查询结果封装在 map 中，所以不能直接获取基础数据类型，都是通过 <code>NSNumber</code> 或 <code>NSValue</code> 包装后的对象；</li>
+<li>如果能将部分常用的 SQL 语句集成到库中，使用一时爽，一直使用一直爽（有点痴人说梦的感觉）；等等。</li>
+</ol>
+<p>看完 <code>FMDatabaseQueue</code> 实现多线程安全和事务后，再来看看 <code>FMDatabasePool</code> 是怎么做的？</p>
+<p>从源码可以看出，<code>Pool</code> 中增加了两个属性：<code>_databaseInPool</code>、<code>_databaseOutPool</code>，用于存放同一个路径对应的数据库抽象对象 <code>FMDatabase</code> 的实体。每次，当执行 <code>inDatabase</code> 方法时，首先从 <code>_databaseInPool</code> 中去获取数据库对象，如果获取到了，那么将起放到 <code>_databaseOutPool</code> 中，如果没有取到，那么考虑初始化一个数据库对象，当数据库通过用户代理设置无需加入到 <code>Pool</code> 中时，直接关闭数据库连接，释放数据库对象不执行数据库操作，当代理方法返回 <code>true</code> 时将其放入到 <code>_databaseOutPool</code> 中管理。</p>
+<p>当然，官方给出了一条建议：</p>
+<blockquote>
+<p>If you really really really know what you’re doing and <code>FMDatabasePool</code> is what you really really need (ie, you’re using a read only database), OK you can use it. But just be careful not to deadlock!<br>ONLY_USE_THE_POOL_IF_YOU_ARE_DOING_READS_OTHERWISE_YOULL_DEADLOCK_USE_FMDATABASEQUEUE_INSTEAD</p>
+</blockquote>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>在这篇文章中，我从基础的 <code>SQLite</code> 使用到 <code>FMDB</code> 进行了探讨和研究，不仅仅使用到了数据库的知识：增、删、查、改和锁，还学习到了 <code>FMDB</code> 在解决多线程死锁时使用的技巧，通过 <code>dispatch_queue_set_specific()</code> 函数关联对象和队列，通过对象相等变相推断队列相同，从而避免了线程死锁。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/18/对 CoreAnimation 进行封装，实现链式调用/" rel="next" title="对 CoreAnimation 进行封装，实现链式调用">
+                <i class="fa fa-chevron-left"></i> 对 CoreAnimation 进行封装，实现链式调用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            yeeshe
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/header.jpg" alt="yeeshe">
+            
+              <p class="site-author-name" itemprop="name">yeeshe</p>
+              <p class="site-description motion-element" itemprop="description">积少成多，水滴石穿</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  
+                </div>
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/qiancaox" title="GitHub &rarr; https://github.com/qiancaox" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://www.jianshu.com/u/14a1ad47fbf3" title="简书 &rarr; https://www.jianshu.com/u/14a1ad47fbf3" rel="noopener" target="_blank"><i class="fa fa-fw fa-bookmark"></i>简书</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SQLite"><span class="nav-number">1.</span> <span class="nav-text">SQLite</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQLite的缺点"><span class="nav-number">2.</span> <span class="nav-text">SQLite的缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FMDB"><span class="nav-number">3.</span> <span class="nav-text">FMDB</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="author" itemprop="copyrightHolder"> yeeshe</span>
+  <span class="author" itemprop="copyrightHolder"> 所有。</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">特别鸣谢：博客框架由<a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a>提供</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题由<a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT</a>提供</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

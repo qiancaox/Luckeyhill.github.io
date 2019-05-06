@@ -321,6 +321,174 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://qiancaox.github.io/2019/05/06/从 SQLite 到 FMDB，我经历了什么/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yeeshe">
+      <meta itemprop="description" content="积少成多，水滴石穿">
+      <meta itemprop="image" content="/images/header.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yeeshe">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/05/06/从 SQLite 到 FMDB，我经历了什么/" class="post-title-link" itemprop="url">从 SQLite 到 FMDB，我经历了什么</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+
+	      
+
+              
+                <span class="post-meta-item-text">发布于2019-05-06</span>
+              
+
+            
+          </span>
+
+          
+            <span class="post-category">
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+	      
+
+              
+                <span class="post-meta-item-text">分类于</span>
+
+              
+
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/iOS-开发笔记/" itemprop="url" rel="index"><span itemprop="name">iOS 开发笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>移动端的纯在线 App 已经跟不上时代的节奏了，或多或少都会有一些数据需要本地存储。目前在 iOS 上有以下几种方式可供选择：</p>
+<ol>
+<li><code>NSUserDefault</code>，也称偏好设置。用于数据规模小，于业务无关的数据存储；</li>
+<li><code>keychain</code>，苹果提供的带有可逆加密的存储机制，只要系统不重装，数据都能得到保留，并且支持 iClound 云同步，普遍用于各种存密码的存储和用户唯一标识串等；</li>
+<li>文件存储：<ul>
+<li>Plist 文件，也称属性列表。结构化较好或需要方便查询的数据可以选择；</li>
+<li>Archive ，也叫归档/解档。如果需要直接对象化数据时使用，但是由于归档或解档时需要对对象序列化，耗时较多；</li>
+<li>一般文件存储，由于文件在在读写时耗时，所以通常用在量比较小的数据上。</li>
+</ul>
+</li>
+<li>CoreData，苹果官推的数据存储框架，笔者没使用过，这里有个文章可以看看：<a href="http://blog.devtang.com/2016/08/04/i-do-not-like-core-data/" target="_blank" rel="noopener">我为什么不喜欢 Core Data</a>；</li>
+<li>数据库存储。</li>
+</ol>
+<p>说到数据库存储，目前流行的有： <a href="https://www.sqlite.org/index.html" target="_blank" rel="noopener">SQLite</a>、<a href="https://realm.io/" target="_blank" rel="noopener">Realm</a> 等方式在移动端使用。并且它们都有轻量级、跨平台的特点，而今天的主角是 SQLite 数据库。下面将从两方面来探讨下：<a href="#SQLite">SQLite</a>、<a href="#FMDB">FMDB</a></p>
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/05/06/从 SQLite 到 FMDB，我经历了什么/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://qiancaox.github.io/2019/04/18/对 CoreAnimation 进行封装，实现链式调用/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -818,7 +986,7 @@
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
